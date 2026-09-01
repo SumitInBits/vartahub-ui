@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+/*
+ * Home page specific styles.
+ *
+ * Most of the UI uses Tailwind CSS utility classes.
+ * Keep this file for styles that should belong
+ * specifically to the home component.
+ */
+
+button {
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/*
+ * Smooth card interaction.
+ */
+.group {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/*
+ * Material icons should remain vertically aligned
+ * with surrounding text.
+ */
+mat-icon {
+  vertical-align: middle;
+}
+
+/*
+ * Prevent Material icon buttons from causing
+ * unwanted overflow inside cards.
+ */
+.mat-mdc-icon-button {
+  flex-shrink: 0;
+}
