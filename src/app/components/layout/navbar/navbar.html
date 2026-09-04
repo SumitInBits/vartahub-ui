@@ -1,0 +1,144 @@
+<mat-sidenav-container class="h-12 z-50">
+  <!-- Mobile Sidebar -->
+  <mat-sidenav #sidenav mode="over" position="start" class="w-64!">
+    <div class="flex h-full flex-col">
+      <!-- Sidebar Header -->
+      <div class="flex h-16 shrink-0 items-center justify-between border-b px-4">
+        <div class="flex items-center gap-2">
+          <mat-icon color="primary">groups</mat-icon>
+
+          <span class="text-lg font-black tracking-tight"> Vartahub </span>
+        </div>
+
+        <button matIconButton aria-label="Close sidebar" (click)="sidenav.close()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Sidebar Navigation -->
+      <mat-nav-list class="flex-1! px-2!">
+        <a
+          mat-list-item
+          routerLink=""
+          routerLinkActive="selected"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="sidenav.close()"
+        >
+          <mat-icon matListItemIcon>home</mat-icon>
+          <span matListItemTitle>Home</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="/instructor"
+          routerLinkActive="selected"
+          (click)="sidenav.close()"
+        >
+          <mat-icon matListItemIcon>school</mat-icon>
+          <span matListItemTitle>Instructors</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="/schedule"
+          routerLinkActive="selected"
+          (click)="sidenav.close()"
+        >
+          <mat-icon matListItemIcon>video_call</mat-icon>
+          <span matListItemTitle>Meetings</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="/profile"
+          routerLinkActive="selected"
+          (click)="sidenav.close()"
+        >
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Profile</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="/settings"
+          routerLinkActive="selected"
+          (click)="sidenav.close()"
+        >
+          <mat-icon matListItemIcon>settings</mat-icon>
+          <span matListItemTitle>Settings</span>
+        </a>
+      </mat-nav-list>
+
+      <!-- Sidebar Footer -->
+      <div class="shrink-0 border-t p-3">
+        <button mat-stroked-button routerLink="/registration" class="w-full!">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <!-- Navbar -->
+    <mat-toolbar class="relative z-40">
+      <!-- Left -->
+      <div class="flex items-center">
+        <button
+          matIconButton
+          aria-label="Toggle sidebar"
+          class="md:hidden!"
+          (click)="sidenav.toggle()"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <div class="ml-2 flex cursor-pointer items-center gap-2" routerLink="">
+          <mat-icon color="primary">groups</mat-icon>
+
+          <span class="text-lg tracking-tight"> Vartahub </span>
+        </div>
+      </div>
+
+      <!-- Center Navigation -->
+      <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
+        <a
+          mat-button
+          routerLink=""
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Home
+        </a>
+
+        <a mat-button routerLink="/instructor" routerLinkActive="active"> Instructors </a>
+
+        <a mat-button routerLink="/schedule" routerLinkActive="active"> Meetings </a>
+      </nav>
+
+      <!-- Right -->
+      <div class="ml-auto flex items-center gap-1">
+        <button mat-stroked-button aria-label="Get Started" routerLink="/profile">
+          <mat-icon>arrow_forward</mat-icon>
+          <span>Get Started</span>
+        </button>
+
+        <!--        <button-->
+        <!--          matIconButton-->
+        <!--          aria-label="Notifications"-->
+        <!--        >-->
+        <!--          <mat-icon>notifications_none</mat-icon>-->
+        <!--        </button>-->
+
+        <!--        <button-->
+        <!--          matIconButton-->
+        <!--          aria-label="Profile"-->
+        <!--          routerLink="/profile"-->
+        <!--        >-->
+        <!--          <mat-icon>account_circle</mat-icon>-->
+        <!--        </button>-->
+      </div>
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>

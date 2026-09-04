@@ -1,0 +1,700 @@
+<div class="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-5xl">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <h1 class="mt-4 text-3xl font-black tracking-tight sm:text-4xl">Create your account</h1>
+
+      <p class="mx-auto mt-2 max-w-xl text-sm leading-6">
+        Tell us a little about yourself so we can personalize your Vartahub experience.
+      </p>
+    </div>
+
+    <!-- Stepper -->
+    <mat-card appearance="outlined" class="overflow-hidden!">
+      <mat-stepper orientation="horizontal" linear #stepper>
+        <!-- ===================================================== -->
+        <!-- STEP 1 — BASIC INFORMATION -->
+        <!-- ===================================================== -->
+
+        <mat-step [stepControl]="basicInformation" label="Basic Information">
+          <form [formGroup]="basicInformation">
+            <div class="p-6 sm:p-8">
+              <!-- Header -->
+              <div class="mb-8">
+                <div class="flex items-center gap-3">
+                  <mat-icon color="primary">person</mat-icon>
+
+                  <div>
+                    <h2 class="text-xl font-bold">Basic information</h2>
+
+                    <p class="text-sm">Enter the information you'll use for your account.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fields -->
+              <div class="space-y-2">
+                <!-- First / Last Name -->
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>First name</mat-label>
+
+                    <input matInput formControlName="firstName" placeholder="John" />
+
+                    @if (basicInformation.controls.firstName.hasError('required')) {
+                      <mat-error> First name is required. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.firstName.hasError('maxlength')) {
+                      <mat-error> First name cannot exceed 50 characters. </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Last name</mat-label>
+
+                    <input matInput formControlName="lastName" placeholder="Doe" />
+
+                    @if (basicInformation.controls.lastName.hasError('required')) {
+                      <mat-error> Last name is required. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.lastName.hasError('maxlength')) {
+                      <mat-error> Last name cannot exceed 50 characters. </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <!-- Username / Email -->
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Username</mat-label>
+
+                    <mat-icon matPrefix>alternate_email</mat-icon>
+
+                    <input matInput formControlName="username" placeholder="johndoe" />
+
+                    @if (basicInformation.controls.username.hasError('required')) {
+                      <mat-error> Username is required. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.username.hasError('minlength')) {
+                      <mat-error> Username must be at least 3 characters. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.username.hasError('maxlength')) {
+                      <mat-error> Username cannot exceed 30 characters. </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Email</mat-label>
+
+                    <mat-icon matPrefix>email</mat-icon>
+
+                    <input
+                      matInput
+                      type="email"
+                      formControlName="email"
+                      placeholder="john@example.com"
+                    />
+
+                    @if (basicInformation.controls.email.hasError('required')) {
+                      <mat-error> Email is required. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.email.hasError('email')) {
+                      <mat-error> Enter a valid email address. </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <!-- Password -->
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Password</mat-label>
+
+                    <mat-icon matPrefix>lock</mat-icon>
+
+                    <input
+                      matInput
+                      type="password"
+                      formControlName="password"
+                      placeholder="••••••••"
+                    />
+
+                    @if (basicInformation.controls.password.hasError('required')) {
+                      <mat-error> Password is required. </mat-error>
+                    }
+
+                    @if (basicInformation.controls.password.hasError('minlength')) {
+                      <mat-error> Password must be at least 8 characters. </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Confirm password</mat-label>
+
+                    <mat-icon matPrefix>lock_reset</mat-icon>
+
+                    <input
+                      matInput
+                      type="password"
+                      formControlName="confirmPassword"
+                      placeholder="••••••••"
+                    />
+
+                    @if (basicInformation.controls.confirmPassword.hasError('required')) {
+                      <mat-error> Please confirm your password. </mat-error>
+                    }
+
+                    @if (basicInformation.hasError('passwordMismatch')) {
+                      <mat-error> Passwords do not match. </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="mt-8 flex justify-end">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  matStepperNext
+                  type="button"
+                  [disabled]="basicInformation.invalid"
+                >
+                  Continue
+
+                  <mat-icon iconPositionEnd> arrow_forward </mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ===================================================== -->
+        <!-- STEP 2 — SPECIALIZATIONS -->
+        <!-- ===================================================== -->
+
+        <mat-step [stepControl]="interestsForm" label="Specializations">
+          <form [formGroup]="interestsForm">
+            <div class="p-6 sm:p-8">
+              <!-- Header -->
+              <div class="mb-8">
+                <div class="flex items-center gap-3">
+                  <mat-icon color="primary"> school </mat-icon>
+
+                  <div>
+                    <h2 class="text-xl font-bold">Your specializations</h2>
+
+                    <p class="text-sm">
+                      Select at least one specialization and tell us your knowledge level.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Specialization Select -->
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label> Specializations </mat-label>
+
+                <mat-icon matPrefix> school </mat-icon>
+
+                <mat-select
+                  multiple
+                  [value]="getSelectedSpecializationNames()"
+                  (selectionChange)="onSpecializationsChange($event.value)"
+                  (closed)="clearSpecializationSearch()"
+                >
+                  <mat-option>
+                    <ngx-mat-select-search
+                      [formControl]="specializationSearchControl"
+                      placeholderLabel="Search specialization..."
+                      noEntriesFoundLabel="No specialization found"
+                    />
+                  </mat-option>
+
+                  @for (specialization of filteredSpecializations; track specialization) {
+                    <mat-option
+                      [value]="specialization"
+                      [disabled]="isSpecializationDisabled(specialization)"
+                    >
+                      {{ specialization }}
+                    </mat-option>
+                  }
+                </mat-select>
+
+                <mat-hint>
+                  Select 1 to 5 specializations.
+                  {{ selectedSpecializationCount }}/5 selected
+                </mat-hint>
+
+                @if (
+                  specializationArray.hasError('required') ||
+                  specializationArray.hasError('minlength')
+                ) {
+                  <mat-error> Please select at least one specialization. </mat-error>
+                }
+
+                @if (specializationArray.hasError('maxlength')) {
+                  <mat-error> You can select a maximum of 5 specializations. </mat-error>
+                }
+              </mat-form-field>
+
+              <!-- Selected Specializations -->
+              @if (selectedSpecializationCount > 0) {
+                <div class="mt-6">
+                  <div class="mb-4">
+                    <h3 class="text-sm font-semibold">Knowledge level</h3>
+                    <p class="mt-1 text-xs">Select your knowledge level for each specialization.</p>
+                  </div>
+
+                  <div>
+                    @for (
+                      specialization of getSelectedSpecializationNames();
+                      track specialization
+                    ) {
+                      <div
+                        class="grid min-w-0 grid-cols-[minmax(0,1fr)_220px_auto] items-center gap-4 py-3"
+                      >
+                        <!-- Specialization -->
+                        <div class="flex min-w-0 items-center gap-3">
+                          <mat-icon color="primary">school</mat-icon>
+
+                          <span class="min-w-0 truncate font-medium">
+                            {{ specialization }}
+                          </span>
+                        </div>
+
+                        <!-- Knowledge Level -->
+                        <mat-form-field appearance="outline" class="w-full">
+                          <mat-label>Knowledge level</mat-label>
+
+                          <mat-select
+                            [value]="getKnowledgeLevel(specialization)"
+                            (selectionChange)="
+                              getSpecializationGroup(specialization)
+                                ?.get('level')
+                                ?.setValue($event.value)
+                            "
+                          >
+                            @for (level of knowledgeLevels; track level.value) {
+                              <mat-option [value]="level.value">
+                                {{ level.label }}
+                              </mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+
+                        <!-- Remove -->
+                        <button
+                          matIconButton
+                          type="button"
+                          aria-label="Remove specialization"
+                          (click)="removeSpecialization(specialization)"
+                        >
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+
+                      <mat-divider />
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Empty State -->
+              @if (selectedSpecializationCount === 0) {
+                <div class="mt-6 flex flex-col items-center py-8 text-center">
+                  <mat-icon class="mb-2" color="primary"> search </mat-icon>
+
+                  <p class="text-sm font-medium">No specialization selected</p>
+
+                  <p class="mt-1 text-xs">
+                    Search and select at least one specialization to continue.
+                  </p>
+                </div>
+              }
+
+              <!-- Actions -->
+              <div class="mt-8 flex justify-between">
+                <button mat-button matStepperPrevious type="button">
+                  <mat-icon> arrow_back </mat-icon>
+
+                  Back
+                </button>
+
+                <button
+                  mat-flat-button
+                  color="primary"
+                  matStepperNext
+                  type="button"
+                  [disabled]="interestsForm.invalid"
+                >
+                  Continue
+
+                  <mat-icon iconPositionEnd> arrow_forward </mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ===================================================== -->
+        <!-- STEP 3 — EXPERIENCE -->
+        <!-- ===================================================== -->
+
+        <mat-step [stepControl]="experienceForm" label="Experience">
+          <form [formGroup]="experienceForm">
+            <div class="p-6 sm:p-8">
+              <!-- Header -->
+              <div class="mb-8">
+                <div class="flex items-center gap-3">
+                  <mat-icon color="primary"> work_history </mat-icon>
+
+                  <div>
+                    <h2 class="text-xl font-bold">Experience</h2>
+
+                    <p class="text-sm">Tell us about your professional experience.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Experience Type -->
+              <mat-radio-group
+                formControlName="experienceType"
+                class="grid gap-4 sm:grid-cols-2"
+                (change)="onExperienceTypeChange()"
+              >
+                <mat-radio-button value="fresher"> Fresher </mat-radio-button>
+
+                <mat-radio-button value="experienced"> Experienced </mat-radio-button>
+              </mat-radio-group>
+
+              @if (isExperienced) {
+                <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label> Experience duration </mat-label>
+
+                    <mat-icon matPrefix> schedule </mat-icon>
+
+                    <input
+                      matInput
+                      formControlName="experienceDuration"
+                      placeholder="e.g. 2 years"
+                    />
+
+                    @if (experienceForm.controls.experienceDuration.hasError('required')) {
+                      <mat-error> Experience duration is required. </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label> Company name </mat-label>
+
+                    <mat-icon matPrefix> business </mat-icon>
+
+                    <input matInput formControlName="companyName" placeholder="e.g. Google" />
+
+                    @if (experienceForm.controls.companyName.hasError('required')) {
+                      <mat-error> Company name is required for instructors. </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                @if (selectedAccountType === 'instructor') {
+                  <mat-card appearance="outlined" class="mt-4">
+                    <mat-card-content class="flex items-start gap-3">
+                      <mat-icon color="primary"> info </mat-icon>
+
+                      <div>
+                        <p class="text-sm font-semibold">Instructor experience</p>
+
+                        <p class="mt-1 text-xs leading-5">
+                          Instructors must provide both their experience duration and company or
+                          organization.
+                        </p>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                }
+              }
+
+              @if (experienceForm.controls.experienceType.value === 'fresher') {
+                <mat-card appearance="outlined" class="mt-6">
+                  <mat-card-content class="flex items-start gap-3">
+                    <mat-icon color="primary"> school </mat-icon>
+
+                    <div>
+                      <p class="text-sm font-semibold">No professional experience required</p>
+
+                      <p class="mt-1 text-xs leading-5">
+                        You can continue without entering a duration or company.
+                      </p>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              }
+
+              <!-- Actions -->
+              <div class="mt-8 flex justify-between">
+                <button mat-button matStepperPrevious type="button">
+                  <mat-icon> arrow_back </mat-icon>
+
+                  Back
+                </button>
+
+                <button
+                  mat-flat-button
+                  color="primary"
+                  matStepperNext
+                  type="button"
+                  [disabled]="experienceForm.invalid"
+                >
+                  Continue
+
+                  <mat-icon iconPositionEnd> arrow_forward </mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ===================================================== -->
+        <!-- STEP 4 — ACCOUNT TYPE -->
+        <!-- ===================================================== -->
+
+        <mat-step [stepControl]="accountTypeForm" label="Account Type">
+          <form [formGroup]="accountTypeForm">
+            <div class="p-6 sm:p-8">
+              <!-- Header -->
+              <div class="mb-8">
+                <div class="flex items-center gap-3">
+                  <mat-icon color="primary"> manage_accounts </mat-icon>
+
+                  <div>
+                    <h2 class="text-xl font-bold">Choose your account type</h2>
+
+                    <p class="text-sm">Select how you'll use Vartahub.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Account Type -->
+              <mat-radio-group
+                formControlName="type"
+                class="grid gap-4 sm:grid-cols-2"
+                (change)="onAccountTypeChange()"
+              >
+                <mat-radio-button value="student"> Student </mat-radio-button>
+
+                <mat-radio-button value="instructor"> Instructor </mat-radio-button>
+              </mat-radio-group>
+
+              @if (selectedAccountType === 'instructor') {
+                <mat-card appearance="outlined" class="mt-6">
+                  <mat-card-content class="flex items-start gap-3">
+                    <mat-icon color="primary"> verified </mat-icon>
+
+                    <div>
+                      <p class="text-sm font-semibold">Instructor requirements</p>
+
+                      <p class="mt-1 text-xs leading-5">
+                        Instructor accounts require professional experience and company or
+                        organization details.
+                      </p>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              }
+
+              <!-- Actions -->
+              <div class="mt-8 flex justify-between">
+                <button mat-button matStepperPrevious type="button">
+                  <mat-icon> arrow_back </mat-icon>
+
+                  Back
+                </button>
+
+                <button
+                  mat-flat-button
+                  color="primary"
+                  matStepperNext
+                  type="button"
+                  [disabled]="accountTypeForm.invalid"
+                >
+                  Review
+
+                  <mat-icon iconPositionEnd> arrow_forward </mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ===================================================== -->
+        <!-- STEP 5 — REVIEW -->
+        <!-- ===================================================== -->
+
+        <mat-step label="Review">
+          <div class="p-6 sm:p-8">
+            <!-- Header -->
+            <div class="mb-8">
+              <div class="flex items-center gap-3">
+                <mat-icon color="primary"> fact_check </mat-icon>
+
+                <div>
+                  <h2 class="text-xl font-bold">Review your information</h2>
+
+                  <p class="text-sm">
+                    Make sure everything looks correct before creating your account.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Basic Information -->
+            <mat-card appearance="outlined">
+              <mat-card-header>
+                <mat-icon matCardAvatar> person </mat-icon>
+
+                <mat-card-title> Basic information </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="grid gap-5 p-2 sm:grid-cols-2">
+                  <div>
+                    <p class="text-xs">Name</p>
+
+                    <p class="mt-1 font-medium">
+                      {{ basicInformation.controls.firstName.value }}
+                      {{ basicInformation.controls.lastName.value }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs">Username</p>
+
+                    <p class="mt-1 font-medium">
+                      {{ basicInformation.controls.username.value }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs">Email</p>
+
+                    <p class="mt-1 font-medium">
+                      {{ basicInformation.controls.email.value }}
+                    </p>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Specializations -->
+            <mat-card appearance="outlined" class="mt-4">
+              <mat-card-header>
+                <mat-icon matCardAvatar> school </mat-icon>
+
+                <mat-card-title> Specializations </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                @if (selectedSpecializationCount === 0) {
+                  <p class="p-2 text-sm">—</p>
+                } @else {
+                  <mat-chip-set>
+                    @for (
+                      specialization of getSelectedSpecializationNames();
+                      track specialization
+                    ) {
+                      <mat-chip>
+                        {{ specialization }}
+                        ·
+                        {{ getKnowledgeLevel(specialization) }}
+                      </mat-chip>
+                    }
+                  </mat-chip-set>
+                }
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Experience -->
+            <mat-card appearance="outlined" class="mt-4">
+              <mat-card-header>
+                <mat-icon matCardAvatar> work_history </mat-icon>
+
+                <mat-card-title> Experience </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="grid gap-5 p-2 sm:grid-cols-3">
+                  <div>
+                    <p class="text-xs">Experience type</p>
+
+                    <p class="mt-1 font-medium capitalize">
+                      {{ experienceForm.controls.experienceType.value || '—' }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs">Duration</p>
+
+                    <p class="mt-1 font-medium">
+                      {{ experienceForm.controls.experienceDuration.value || '—' }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs">Company</p>
+
+                    <p class="mt-1 font-medium">
+                      {{ experienceForm.controls.companyName.value || '—' }}
+                    </p>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Account Type -->
+            <mat-card appearance="outlined" class="mt-4">
+              <mat-card-header>
+                <mat-icon matCardAvatar> manage_accounts </mat-icon>
+
+                <mat-card-title> Account type </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="flex items-center gap-3 p-2">
+                  <mat-icon>
+                    {{ selectedAccountType === 'instructor' ? 'person_pin' : 'school' }}
+                  </mat-icon>
+
+                  <span class="font-semibold capitalize">
+                    {{ selectedAccountType || '—' }}
+                  </span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Actions -->
+            <div class="mt-8 flex justify-between">
+              <button mat-button matStepperPrevious type="button">
+                <mat-icon> arrow_back </mat-icon>
+
+                Back
+              </button>
+
+              <button mat-flat-button color="primary" type="button" (click)="createAccount()">
+                <mat-icon> person_add </mat-icon>
+
+                Create account
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card>
+  </div>
+</div>
