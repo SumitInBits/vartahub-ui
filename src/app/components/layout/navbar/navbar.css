@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+mat-sidenav-container {
+  min-height: 64px;
+}
+
+mat-sidenav {
+  max-width: 85vw;
+}

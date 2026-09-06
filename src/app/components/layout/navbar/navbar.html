@@ -1,9 +1,9 @@
-<mat-sidenav-container class="h-12 z-50">
+<mat-sidenav-container class="z-50  bg-surface-container " >
   <!-- Mobile Sidebar -->
-  <mat-sidenav #sidenav mode="over" position="start" class="w-64!">
+  <mat-sidenav #sidenav mode="over" position="start" class="w-72! bg-surface">
     <div class="flex h-full flex-col">
       <!-- Sidebar Header -->
-      <div class="flex h-16 shrink-0 items-center justify-between border-b px-4">
+      <div class="flex h-16 shrink-0 items-center justify-between border-b border-outline-variant px-4">
         <div class="flex items-center gap-2">
           <mat-icon color="primary">groups</mat-icon>
 
@@ -19,7 +19,7 @@
       <mat-nav-list class="flex-1! px-2!">
         <a
           mat-list-item
-          routerLink=""
+          routerLink=" "
           routerLinkActive="selected"
           [routerLinkActiveOptions]="{ exact: true }"
           (click)="sidenav.close()"
@@ -40,7 +40,7 @@
 
         <a
           mat-list-item
-          routerLink="/schedule"
+          routerLink="/schedule-meeting"
           routerLinkActive="selected"
           (click)="sidenav.close()"
         >
@@ -70,8 +70,8 @@
       </mat-nav-list>
 
       <!-- Sidebar Footer -->
-      <div class="shrink-0 border-t p-3">
-        <button mat-stroked-button routerLink="/registration" class="w-full!">
+      <div class="shrink-0 border-t border-outline-variant p-3">
+        <button mat-stroked-button routerLink="/registration" class="w-full!" (click)="logout()">
           <mat-icon>logout</mat-icon>
           Logout
         </button>
@@ -82,7 +82,7 @@
   <!-- Main Content -->
   <mat-sidenav-content>
     <!-- Navbar -->
-    <mat-toolbar class="relative z-40">
+    <mat-toolbar class="relative z-40 border-b! border-outline-variant! bg-surface!">
       <!-- Left -->
       <div class="flex items-center">
         <button
@@ -97,28 +97,29 @@
         <div class="ml-2 flex cursor-pointer items-center gap-2" routerLink="">
           <mat-icon color="primary">groups</mat-icon>
 
-          <span class="text-lg tracking-tight"> Vartahub </span>
+          <span class="text-lg font-bold tracking-tight text-on-surface"> Vartahub </span>
         </div>
       </div>
 
       <!-- Center Navigation -->
-      <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
+      <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex" aria-label="Main navigation">
         <a
           mat-button
           routerLink=""
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+          [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>home</mat-icon>
           Home
         </a>
 
-        <a mat-button routerLink="/instructor" routerLinkActive="active"> Instructors </a>
-
-        <a mat-button routerLink="/schedule" routerLinkActive="active"> Meetings </a>
+        <a mat-button routerLink="/instructor" routerLinkActive="active" >
+          <mat-icon>school</mat-icon> Instructors </a>
+        <a mat-button routerLink="/schedule" routerLinkActive="active">
+          <mat-icon>groups</mat-icon>Meetings </a>
       </nav>
 
       <!-- Right -->
-      <div class="ml-auto flex items-center gap-1">
+      <div class="ml-auto flex items-center gap-2">
         <button mat-stroked-button aria-label="Get Started" routerLink="/profile">
           <mat-icon>arrow_forward</mat-icon>
           <span>Get Started</span>

@@ -1,29 +1,35 @@
-import { Component } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
+  selector: 'app-navbar',
+  standalone: true,
   imports: [
-    MatIcon,
-    RouterLinkActive,
-    RouterLink,
     MatButton,
     MatIconButton,
+    MatIcon,
     MatToolbar,
-    MatSidenavContent,
-    MatListItemIcon,
-    MatListItemTitle,
-    MatListItem,
-    MatNavList,
     MatSidenav,
     MatSidenavContainer,
+    MatSidenavContent,
+    MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
+    MatNavList,
+    RouterLink,
+    RouterLinkActive,
   ],
-  selector: 'app-navbar',
-  styleUrl: './navbar.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.html',
+  styleUrl: './navbar.css',
 })
-export class Navbar {}
+export class Navbar {
+  protected logout(): void {
+    // Connect this to your Keycloak/AuthService logout flow.
+  }
+}

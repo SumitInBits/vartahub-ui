@@ -1,0 +1,307 @@
+<div class="flex min-h-screen w-full items-center justify-center bg-surface p-4 md:p-6">
+  <div
+    class="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-outline-variant bg-surface shadow-xl"
+  >
+    <!-- Form Section -->
+    <div class="max-h-[90vh] overflow-y-auto p-6 md:p-8">
+      <!-- Header -->
+      <div class="mb-6 flex items-start gap-3">
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="chooseAnotherInstructor()"
+          class="mt-0.5 flex h-10! w-10! min-w-10! shrink-0 items-center justify-center rounded-xl border-outline! p-0! text-on-surface-variant! hover:bg-surface-container!"
+          title="Back to Instructors"
+        >
+          <mat-icon class="text-on-surface-variant">arrow_back</mat-icon>
+        </button>
+
+        <div>
+          <h1
+            class="flex items-center gap-2 text-xl font-bold text-on-surface md:text-2xl"
+          >
+            <mat-icon class="text-primary">videocam</mat-icon>
+            Schedule Meeting
+          </h1>
+
+          <p class="mt-0.5 text-xs text-on-surface-variant md:text-sm">
+            Find a participant by choosing your skill and availability.
+          </p>
+        </div>
+      </div>
+
+      <!-- Instructor Booking Notification -->
+      @if (selectedInstructorName()) {
+        <div
+          class="mb-6 flex items-center justify-between rounded-xl border border-primary bg-primary-container p-3 text-on-primary-container"
+        >
+          <div class="flex items-center gap-2.5">
+            <mat-icon class="text-primary">school</mat-icon>
+
+            <div>
+              <span
+                class="block text-[10px] font-bold uppercase tracking-wider text-primary"
+              >
+                Expert Booking Mode
+              </span>
+
+              <span class="text-xs font-bold md:text-sm">
+                Scheduling session with
+                <span class="underline">
+                  {{ selectedInstructorName() }}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            class="h-7! border-outline! px-2! text-xs! text-primary!"
+            (click)="chooseAnotherInstructor()"
+          >
+            Choose Another
+          </button>
+        </div>
+      }
+
+      <form
+        [formGroup]="meetingForm"
+        class="space-y-5"
+        (ngSubmit)="createMeeting()"
+      >
+        <!-- 1. Skill Selection -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            1. What do you want to practice?
+          </label>
+
+          <mat-form-field appearance="outline" class="w-full !text-sm">
+            <mat-icon matPrefix class="mr-2 text-sm text-on-surface-variant">
+              search
+            </mat-icon>
+
+            <mat-label>Select a skill</mat-label>
+
+            <input
+              matInput
+              formControlName="skill"
+              [matAutocomplete]="auto"
+              (input)="filterSkills($any($event.target).value)"
+              placeholder="e.g. Angular, Java, System Design"
+            />
+
+            @if (meetingForm.controls['skill'].value) {
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="removeSkill()"
+              >
+                <mat-icon class="text-sm">close</mat-icon>
+              </button>
+            }
+
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (skill of filteredSkills(); track skill) {
+                <mat-option [value]="skill">
+                  {{ skill }}
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <!-- 2. Knowledge Level -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            2. Knowledge Level
+          </label>
+
+          <mat-radio-group
+            formControlName="level"
+            class="grid grid-cols-1 gap-2 md:grid-cols-3"
+          >
+            @for (lvl of levels; track lvl.value) {
+              <mat-radio-button
+                [value]="lvl.value"
+                class="flex items-center rounded-xl border border-outline-variant p-2.5 text-xs transition hover:bg-surface-container"
+              >
+                <div class="flex items-center gap-1.5">
+                  <mat-icon class="size-4 text-xs text-primary">
+                    {{ lvl.icon }}
+                  </mat-icon>
+
+                  <span class="text-xs font-medium text-on-surface-variant">
+                    {{ lvl.label }}
+                  </span>
+                </div>
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+
+        <!-- 3. Meeting Date -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            3. Meeting Date
+          </label>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Choose a date</mat-label>
+
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="date"
+              [min]="minDate"
+            />
+
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- 4. Availability -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            4. When are you available?
+          </label>
+
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Start Time</mat-label>
+              <input
+                matInput
+                type="time"
+                formControlName="availableFrom"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>End Time</mat-label>
+              <input
+                matInput
+                type="time"
+                formControlName="availableUntil"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- 5. Meeting Duration -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            5. Meeting Duration
+          </label>
+
+          <div
+            class="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container p-3"
+          >
+            <div class="flex items-center gap-2.5">
+              <mat-icon class="text-sm text-primary">timer</mat-icon>
+
+              <div>
+                <span class="block text-xs font-bold text-on-surface">
+                  {{ selectedDuration() }} Minutes
+                </span>
+
+                <span class="text-[10px] text-on-surface-variant">
+                  Min 30 mins, Max limit 60 minutes
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="adjustDuration(-5)"
+                [disabled]="selectedDuration() <= 30"
+                class="h-8! w-8! min-w-8! rounded-lg border-outline! p-0! text-on-surface-variant!"
+              >
+                <mat-icon class="text-xs">remove</mat-icon>
+              </button>
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="adjustDuration(5)"
+                [disabled]="selectedDuration() >= 60"
+                class="h-8! w-8! min-w-8! rounded-lg border-outline! p-0! text-on-surface-variant!"
+              >
+                <mat-icon class="text-xs">add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Practice With -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-on-surface md:text-sm">
+            6. Practice With
+          </label>
+
+          <mat-radio-group
+            formControlName="practiceWith"
+            class="grid grid-cols-1 gap-3 md:grid-cols-2"
+          >
+            @for (opt of practiceWithOptions; track opt.value) {
+              <mat-radio-button
+                [value]="opt.value"
+                [disabled]="
+                  selectedInstructorName() !== null && opt.value === 'peer'
+                "
+                class="flex items-center rounded-xl border border-outline-variant p-2.5 text-xs transition hover:bg-surface-container"
+              >
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-sm text-primary">
+                    {{ opt.icon }}
+                  </mat-icon>
+
+                  <div>
+                    <span class="block text-xs font-medium text-on-surface">
+                      {{ opt.label }}
+                    </span>
+
+                    <span class="text-[10px] text-on-surface-variant">
+                      {{ opt.description }}
+                    </span>
+                  </div>
+                </div>
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+
+        <!-- Actions -->
+        <div
+          class="flex items-center justify-end gap-3 border-t border-outline-variant pt-5"
+        >
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="resetForm()"
+            class="border-outline! text-on-surface-variant!"
+          >
+            Reset
+          </button>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="!canCreateMeeting()"
+            class="bg-primary! text-on-primary!"
+          >
+            Create Meeting
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

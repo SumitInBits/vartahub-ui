@@ -11,7 +11,9 @@ html {
     (
       color: (
         primary: mat.$azure-palette,
+        secondary: mat.$violet-palette,
         tertiary: mat.$blue-palette,
+        error: mat.$rose-palette,
       ),
       typography: Roboto,
       density: 0,
