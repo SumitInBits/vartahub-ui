@@ -1,307 +1,259 @@
-<div class="flex min-h-screen w-full items-center justify-center bg-surface p-4 md:p-6">
-  <div
-    class="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-outline-variant bg-surface shadow-xl"
-  >
-    <!-- Form Section -->
-    <div class="max-h-[90vh] overflow-y-auto p-6 md:p-8">
-      <!-- Header -->
-      <div class="mb-6 flex items-start gap-3">
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="chooseAnotherInstructor()"
-          class="mt-0.5 flex h-10! w-10! min-w-10! shrink-0 items-center justify-center rounded-xl border-outline! p-0! text-on-surface-variant! hover:bg-surface-container!"
-          title="Back to Instructors"
-        >
-          <mat-icon class="text-on-surface-variant">arrow_back</mat-icon>
-        </button>
-
-        <div>
-          <h1
-            class="flex items-center gap-2 text-xl font-bold text-on-surface md:text-2xl"
-          >
-            <mat-icon class="text-primary">videocam</mat-icon>
-            Schedule Meeting
-          </h1>
-
-          <p class="mt-0.5 text-xs text-on-surface-variant md:text-sm">
-            Find a participant by choosing your skill and availability.
-          </p>
-        </div>
+<div class="min-h-full bg-surface">
+  <!-- Page Header -->
+  <section class="border-b border-outline-variant bg-surface-container">
+    <div class="mx-auto max-w-5xl px-6 py-10 sm:px-8 lg:px-10">
+      <div class="max-w-3xl">
+        <p class="text-sm font-bold uppercase tracking-wider text-primary">Schedule a meeting</p>
+        <h1 class="mt-2 text-3xl font-black tracking-tight text-on-surface sm:text-4xl">Create your practice session</h1>
+        <p class="mt-3 max-w-2xl text-base leading-7 text-on-surface-variant">
+          Choose your skill, experience level, preferred time, and who you
+          want to practice with.
+        </p>
       </div>
+    </div>
+  </section>
 
-      <!-- Instructor Booking Notification -->
-      @if (selectedInstructorName()) {
-        <div
-          class="mb-6 flex items-center justify-between rounded-xl border border-primary bg-primary-container p-3 text-on-primary-container"
-        >
-          <div class="flex items-center gap-2.5">
-            <mat-icon class="text-primary">school</mat-icon>
-
-            <div>
-              <span
-                class="block text-[10px] font-bold uppercase tracking-wider text-primary"
-              >
-                Expert Booking Mode
-              </span>
-
-              <span class="text-xs font-bold md:text-sm">
-                Scheduling session with
-                <span class="underline">
-                  {{ selectedInstructorName() }}
-                </span>
-              </span>
+  <!-- Main Content -->
+  <main class="mx-auto max-w-5xl px-6 py-10 sm:px-8 lg:px-12">
+    <form [formGroup]="meetingForm" (ngSubmit)="createMeeting()" class="space-y-6">
+      <!-- Selected Instructor -->
+      @if (selectedInstructorId()) {
+        <section class="rounded-2xl border border-primary bg-primary-container p-5">
+          <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary">
+              <mat-icon>school</mat-icon>
             </div>
-          </div>
 
-          <button
-            mat-stroked-button
-            type="button"
-            class="h-7! border-outline! px-2! text-xs! text-primary!"
-            (click)="chooseAnotherInstructor()"
-          >
-            Choose Another
-          </button>
-        </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold uppercase tracking-wider text-on-primary-container">Selected instructor</p>
+              <h2 class="mt-1 text-lg font-black text-on-primary-container">{{ selectedInstructorName() }}</h2>
+              <p class="mt-1 text-sm leading-6 text-on-primary-container">
+                Your meeting will be scheduled with this instructor.
+              </p>
+            </div>
+
+            <button mat-stroked-button type="button" class="shrink-0! rounded-xl!" (click)="chooseAnotherInstructor()">
+              Change
+            </button>
+          </div>
+        </section>
       }
 
-      <form
-        [formGroup]="meetingForm"
-        class="space-y-5"
-        (ngSubmit)="createMeeting()"
-      >
-        <!-- 1. Skill Selection -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            1. What do you want to practice?
-          </label>
+      <!-- Meeting Details -->
+      <section class="rounded-3xl border border-outline-variant bg-surface p-6 shadow-sm sm:p-8">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-wider text-primary">Meeting details</p>
+          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">
+            What do you want to practice?
+          </h2>
 
-          <mat-form-field appearance="outline" class="w-full !text-sm">
-            <mat-icon matPrefix class="mr-2 text-sm text-on-surface-variant">
-              search
-            </mat-icon>
+          <p class="mt-2 text-sm leading-6 text-on-surface-variant">
+            Tell us what you want to focus on so the session can be matched
+            appropriately.
+          </p>
+        </div>
 
-            <mat-label>Select a skill</mat-label>
-
-            <input
-              matInput
-              formControlName="skill"
-              [matAutocomplete]="auto"
-              (input)="filterSkills($any($event.target).value)"
-              placeholder="e.g. Angular, Java, System Design"
+        <!-- Skill -->
+        <div class="mt-8">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Skill</mat-label>
+            <mat-icon matPrefix>code</mat-icon>
+            <input matInput formControlName="skill" placeholder="Search or select a skill"
+                   [matAutocomplete]="skillAutocomplete"
+                   (input)="filterSkills($any($event.target).value)"
             />
 
-            @if (meetingForm.controls['skill'].value) {
-              <button
-                mat-icon-button
-                matSuffix
-                type="button"
-                (click)="removeSkill()"
-              >
-                <mat-icon class="text-sm">close</mat-icon>
+            @if (meetingForm.get('skill')?.value) {
+              <button mat-icon-button matSuffix type="button" aria-label="Clear selected skill" (click)="removeSkill()">
+                <mat-icon>close</mat-icon>
               </button>
             }
 
-            <mat-autocomplete #auto="matAutocomplete">
+            <mat-autocomplete #skillAutocomplete="matAutocomplete">
               @for (skill of filteredSkills(); track skill) {
-                <mat-option [value]="skill">
-                  {{ skill }}
-                </mat-option>
+                <mat-option [value]="skill">{{ skill }}</mat-option>
               }
             </mat-autocomplete>
+
+            @if (
+              meetingForm.get('skill')?.hasError('required') &&
+              meetingForm.get('skill')?.touched
+              ) {
+              <mat-error>Please select a skill.</mat-error>
+            }
           </mat-form-field>
         </div>
 
-        <!-- 2. Knowledge Level -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            2. Knowledge Level
-          </label>
-
-          <mat-radio-group
-            formControlName="level"
-            class="grid grid-cols-1 gap-2 md:grid-cols-3"
-          >
-            @for (lvl of levels; track lvl.value) {
-              <mat-radio-button
-                [value]="lvl.value"
-                class="flex items-center rounded-xl border border-outline-variant p-2.5 text-xs transition hover:bg-surface-container"
-              >
-                <div class="flex items-center gap-1.5">
-                  <mat-icon class="size-4 text-xs text-primary">
-                    {{ lvl.icon }}
-                  </mat-icon>
-
-                  <span class="text-xs font-medium text-on-surface-variant">
-                    {{ lvl.label }}
-                  </span>
-                </div>
-              </mat-radio-button>
+        <!-- Level -->
+        <div class="mt-4">
+          <p class="mb-3 text-sm font-semibold text-on-surface">Your experience level</p>
+          <mat-radio-group formControlName="level" class="grid gap-3 md:grid-cols-3">
+            @for (level of levels; track level.value) {
+              <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4 transition hover:border-primary">
+                <mat-radio-button [value]="level.value" class="shrink-0"></mat-radio-button>
+                <mat-icon class="text-primary">{{ level.icon }}</mat-icon>
+                <span class="font-semibold text-on-surface">{{ level.label }}</span>
+              </label>
             }
           </mat-radio-group>
         </div>
+      </section>
 
-        <!-- 3. Meeting Date -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            3. Meeting Date
-          </label>
-
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Choose a date</mat-label>
-
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="date"
-              [min]="minDate"
-            />
-
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+      <!-- Schedule -->
+      <section class="rounded-3xl border border-outline-variant bg-surface p-6 shadow-sm sm:p-8">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-wider text-primary">Schedule</p>
+          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">When are you available?</h2>
+          <p class="mt-2 text-sm leading-6 text-on-surface-variant">
+            Select a date and the time window that works best for you.
+          </p>
         </div>
 
-        <!-- 4. Availability -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            4. When are you available?
-          </label>
+        <div class="mt-8 grid gap-x-4 gap-y-2 md:grid-cols-2">
+          <!-- Date -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Date</mat-label>
+            <mat-icon matPrefix>calendar_month</mat-icon>
 
-          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Start Time</mat-label>
-              <input
-                matInput
-                type="time"
-                formControlName="availableFrom"
-              />
-            </mat-form-field>
+            <input matInput [matDatepicker]="datePicker" [min]="minDate" formControlName="date" placeholder="Choose a date"/>
 
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>End Time</mat-label>
-              <input
-                matInput
-                type="time"
-                formControlName="availableUntil"
-              />
-            </mat-form-field>
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+
+            @if (meetingForm.get('date')?.hasError('required') && meetingForm.get('date')?.touched) {
+              <mat-error>Please select a date.</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Session Duration -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Session duration</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-select formControlName="duration" aria-label="Session duration">
+              @for (duration of durationOptions; track duration) {
+                <mat-option [value]="duration">{{ duration }} minutes</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Available From -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Available from</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <mat-select formControlName="availableFrom" aria-label="Available from">
+              @for (time of availableFromOptions; track time) {
+                <mat-option [value]="time">{{ time }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Available Until -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Available until</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <mat-select formControlName="availableUntil" aria-label="Available until">
+              @for (time of availableUntilOptions(); track time) {
+                <mat-option [value]="time">{{ time }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+<!--          @if (meetingForm.hasError('minimumGap') && (meetingForm.get('availableFrom')?.touched ||-->
+<!--            meetingForm.get('availableUntil')?.touched)) {-->
+<!--            <p class="col-span-full -mt-1 text-sm text-error">Available until must be at least 30 minutes after available from.</p>-->
+<!--          }-->
+        </div>
+        <div class="mt-4 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-3">
+          <mat-icon class="mt-0.5 shrink-0 text-primary">info</mat-icon>
+
+          <p class="text-sm leading-6 text-on-surface-variant">
+<!--            <span class="font-semibold text-on-surface">Why do we need an availability window?</span>-->
+            Your selected session duration is the length of the actual meeting. The availability window tells us when you're free, so we can find a
+            suitable time for your session within that period.
+          </p>
+        </div>
+     </section>
+
+      <!-- Practice With -->
+      <section class="rounded-3xl border border-outline-variant bg-surface p-6 shadow-sm sm:p-8">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-wider text-primary">Practice with</p>
+          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">Who would you like to practice with?</h2>
+          <p class="mt-2 text-sm leading-6 text-on-surface-variant">
+            Choose between practicing with another learner or working with an instructor.
+          </p>
+        </div>
+
+        <mat-radio-group formControlName="practiceWith" class="mt-7 grid gap-4 md:grid-cols-2">
+          @for (option of practiceWithOptions;track option.value) {
+            <label class="flex cursor-pointer items-start gap-4 rounded-2xl border border-outline-variant bg-surface-container p-5 transition hover:border-primary">
+              <mat-radio-button [value]="option.value" class="mt-0.5 shrink-0"></mat-radio-button>
+
+              <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-container text-on-primary-container">
+                <mat-icon>{{ option.icon }}</mat-icon>
+              </div>
+
+              <div class="min-w-0">
+                <h3 class="font-bold text-on-surface">{{ option.label }}</h3>
+                <p class="mt-1 text-sm leading-6 text-on-surface-variant">{{ option.description }}</p>
+              </div>
+            </label>
+          }
+        </mat-radio-group>
+
+        @if (selectedInstructorId()) {
+          <div class="mt-5 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4">
+            <mat-icon class="mt-0.5 shrink-0 text-primary">lock</mat-icon>
+            <p class="text-sm leading-6 text-on-surface-variant">
+              This meeting was started from
+              <span class="font-semibold text-on-surface">{{ selectedInstructorName() }}</span>
+              's profile, so the instructor option is fixed for this meeting.
+            </p>
+          </div>
+        }
+      </section>
+
+      <!-- Summary -->
+      <section class="rounded-3xl border border-outline-variant bg-surface-container p-6 sm:p-8">
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary">
+            <mat-icon>event_available</mat-icon>
+          </div>
+
+          <div>
+            <p class="text-sm font-bold uppercase tracking-wider text-primary">Meeting summary</p>
+            <h2 class="mt-1 text-xl font-black text-on-surface">Ready to create your session?</h2>
+            <p class="mt-2 text-sm leading-6 text-on-surface-variant">
+              Your meeting request will use the preferences you've selected above.
+            </p>
           </div>
         </div>
 
-        <!-- 5. Meeting Duration -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            5. Meeting Duration
-          </label>
-
-          <div
-            class="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container p-3"
-          >
-            <div class="flex items-center gap-2.5">
-              <mat-icon class="text-sm text-primary">timer</mat-icon>
+        @if (selectedInstructorName()) {
+          <div class="mt-6 rounded-2xl border border-outline-variant bg-surface p-4">
+            <div class="flex items-center gap-3">
+              <mat-icon class="text-primary">school</mat-icon>
 
               <div>
-                <span class="block text-xs font-bold text-on-surface">
-                  {{ selectedDuration() }} Minutes
-                </span>
-
-                <span class="text-[10px] text-on-surface-variant">
-                  Min 30 mins, Max limit 60 minutes
-                </span>
+                <p class="text-xs text-on-surface-variant">Instructor</p>
+                <p class="font-bold text-on-surface">{{ selectedInstructorName() }}</p>
               </div>
             </div>
-
-            <div class="flex items-center gap-1.5">
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="adjustDuration(-5)"
-                [disabled]="selectedDuration() <= 30"
-                class="h-8! w-8! min-w-8! rounded-lg border-outline! p-0! text-on-surface-variant!"
-              >
-                <mat-icon class="text-xs">remove</mat-icon>
-              </button>
-
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="adjustDuration(5)"
-                [disabled]="selectedDuration() >= 60"
-                class="h-8! w-8! min-w-8! rounded-lg border-outline! p-0! text-on-surface-variant!"
-              >
-                <mat-icon class="text-xs">add</mat-icon>
-              </button>
-            </div>
           </div>
-        </div>
+        }
+      </section>
 
-        <!-- 6. Practice With -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-on-surface md:text-sm">
-            6. Practice With
-          </label>
+      <!-- Actions -->
+      <div class="flex flex-col-reverse gap-3 border-t border-outline-variant pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <button mat-stroked-button type="button" class="h-12! rounded-xl! px-6!" (click)="resetForm()">
+          <mat-icon>restart_alt</mat-icon>
+          Reset
+        </button>
 
-          <mat-radio-group
-            formControlName="practiceWith"
-            class="grid grid-cols-1 gap-3 md:grid-cols-2"
-          >
-            @for (opt of practiceWithOptions; track opt.value) {
-              <mat-radio-button
-                [value]="opt.value"
-                [disabled]="
-                  selectedInstructorName() !== null && opt.value === 'peer'
-                "
-                class="flex items-center rounded-xl border border-outline-variant p-2.5 text-xs transition hover:bg-surface-container"
-              >
-                <div class="flex items-center gap-2">
-                  <mat-icon class="text-sm text-primary">
-                    {{ opt.icon }}
-                  </mat-icon>
-
-                  <div>
-                    <span class="block text-xs font-medium text-on-surface">
-                      {{ opt.label }}
-                    </span>
-
-                    <span class="text-[10px] text-on-surface-variant">
-                      {{ opt.description }}
-                    </span>
-                  </div>
-                </div>
-              </mat-radio-button>
-            }
-          </mat-radio-group>
-        </div>
-
-        <!-- Actions -->
-        <div
-          class="flex items-center justify-end gap-3 border-t border-outline-variant pt-5"
-        >
-          <button
-            mat-stroked-button
-            type="button"
-            (click)="resetForm()"
-            class="border-outline! text-on-surface-variant!"
-          >
-            Reset
-          </button>
-
-          <button
-            mat-flat-button
-            color="primary"
-            type="submit"
-            [disabled]="!canCreateMeeting()"
-            class="bg-primary! text-on-primary!"
-          >
-            Create Meeting
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+        <button mat-flat-button type="submit" class="h-12! rounded-xl! px-7!" [disabled]="meetingForm.invalid">
+          <mat-icon>calendar_month</mat-icon>
+          Create Meeting
+        </button>
+      </div>
+    </form>
+  </main>
 </div>

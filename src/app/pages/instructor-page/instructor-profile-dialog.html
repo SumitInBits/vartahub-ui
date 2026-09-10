@@ -13,7 +13,7 @@
           <div class="min-w-0">
             <h2
               mat-dialog-title
-              class="!m-0 !p-0 !text-2xl !font-black !leading-tight !text-on-surface"
+              class="m-0! !p-0 !text-2xl !font-black !leading-tight !text-on-surface"
             >
               {{ instructor.name }}
             </h2>
@@ -41,7 +41,7 @@
   </div>
 
   <!-- Content -->
-  <mat-dialog-content class="!max-h-none !px-6 !py-6 sm:!px-8">
+  <mat-dialog-content class="max-h-none! px-6! py-6! sm:px-8!">
     <!-- Stats -->
     <div class="grid grid-cols-3 gap-3">
       <div
@@ -50,7 +50,7 @@
         <div
           class="flex items-center justify-center gap-1 text-lg font-black text-on-surface"
         >
-          <mat-icon class="!h-5 !w-5 !text-[18px] !text-primary">
+          <mat-icon class="h-5! w-5! text-[18px]! text-primary!">
             star
           </mat-icon>
 
@@ -147,16 +147,12 @@
   </mat-dialog-content>
 
   <!-- Actions -->
-  <mat-dialog-actions
-    align="end"
-    class="!border-t !border-outline-variant !px-6 !py-4 sm:!px-8"
-  >
+  <mat-dialog-actions align="end" class="border-t! border-outline-variant! px-6! py-4! sm:px-8!">
     <button
       mat-stroked-button
       type="button"
-      class="!rounded-xl"
-      (click)="close()"
-    >
+      class="rounded-xl!"
+      (click)="close()">
       Close
     </button>
 
@@ -164,9 +160,8 @@
       mat-flat-button
       color="primary"
       type="button"
-      class="!rounded-xl"
-      (click)="createMeeting()"
-    >
+      class="rounded-xl!"
+      (click)="createMeeting()">
       <mat-icon>calendar_month</mat-icon>
       Create Meeting
     </button>

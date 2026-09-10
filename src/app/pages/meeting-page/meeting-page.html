@@ -1,0 +1,334 @@
+<main class="min-h-screen bg-surface text-on-surface">
+
+  <!-- HEADER -->
+  <section class="border-b border-outline-variant bg-surface-container">
+    <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wider text-primary">Your practice</p>
+          <h1 class="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Meetings</h1>
+          <p class="mt-3 max-w-2xl text-lg text-on-surface-variant">
+            Manage your upcoming sessions, review past meetings, and share feedback with your practice partners and instructors.
+          </p>
+        </div>
+
+        <a mat-flat-button routerLink="/schedule-meeting" class="h-11! rounded-xl! px-5! font-semibold!">
+          <mat-icon>add</mat-icon>
+          Schedule meeting
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="bg-surface">
+    <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+
+      <!-- UPCOMING -->
+      <div>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-wider text-primary">Coming up</p>
+            <h2 class="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">Upcoming meetings</h2>
+          </div>
+
+          <div class="hidden items-center gap-2 rounded-full bg-primary-container px-3 py-1.5 text-sm font-medium text-on-primary-container sm:flex">
+            <mat-icon class="h-5! w-5! text-[20px]!">event</mat-icon>
+
+            <span>{{ upcomingMeetings.length }} {{ upcomingMeetings.length === 1 ? 'meeting' : 'meetings' }}</span>
+          </div>
+        </div>
+
+
+        @if (upcomingMeetings.length > 0) {
+          <div class="mt-8 grid gap-6 lg:grid-cols-2">
+
+            @for (meeting of upcomingMeetings; track meeting.id) {
+              <article
+                class="group rounded-3xl border border-outline-variant bg-surface-container p-6 transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+
+                <!-- Card header -->
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex items-center gap-4">
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-container text-lg font-bold text-on-primary-container">
+                      {{ meeting.avatar }}
+                    </div>
+
+                    <div>
+                      <h3 class="font-bold">{{ meeting.title }}</h3>
+                      <p class="mt-1 text-sm text-on-surface-variant">{{ meeting.instructor }}</p>
+                      <p class="mt-1 text-xs text-on-surface-variant">{{ meeting.instructorRole }}</p>
+                    </div>
+                  </div>
+
+                  <span class="shrink-0 rounded-full bg-primary-container px-3 py-1.5 text-xs font-semibold text-on-primary-container">Upcoming</span>
+                </div>
+
+                <!-- Meeting details -->
+                <div class="mt-6 grid gap-3 sm:grid-cols-3">
+
+                  <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                    <mat-icon class="h-5! w-5! text-[20px]! text-primary">calendar_month</mat-icon>
+                    <span>{{ meeting.date }}</span>
+                  </div>
+
+                  <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                    <mat-icon class="h-5! w-5! text-[20px]! text-primary">schedule</mat-icon>
+                    <span>{{ meeting.time }}</span>
+                  </div>
+
+                  <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                    <mat-icon class="h-5! w-5! text-[20px]! text-primary">timer</mat-icon>
+                    <span>{{ meeting.duration }}</span>
+                  </div>
+                </div>
+
+                <!-- Meeting type -->
+                <div class="mt-5 flex items-center gap-2 text-sm text-on-surface-variant">
+                  <mat-icon class="h-5! w-5! text-[20px]!">{{meeting.type === 'Peer Interview' ? 'groups' : 'school' }}</mat-icon>
+                  <span>{{ meeting.type }}</span>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-6 flex flex-col gap-3 border-t border-outline-variant pt-5 sm:flex-row sm:justify-end">
+                  <button mat-stroked-button (click)="openMeetingDetails(meeting)">
+                    <mat-icon>visibility</mat-icon>
+                    View Details
+                  </button>
+
+                  <a mat-flat-button [href]="meeting.meetingUrl" class="h-11! rounded-xl! font-semibold!"><mat-icon>videocam</mat-icon>
+                    Join meeting
+                  </a>
+                </div>
+              </article>
+            }
+
+          </div>
+        } @else {
+
+          <div
+            class="mt-8 rounded-3xl border border-outline-variant bg-surface-container p-10 text-center">
+
+            <div
+              class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container">
+              <mat-icon>event_busy</mat-icon>
+            </div>
+
+            <h3 class="mt-5 text-xl font-bold">
+              No upcoming meetings
+            </h3>
+
+            <p class="mx-auto mt-2 max-w-md text-on-surface-variant">
+              You don't have any upcoming meetings. Schedule a practice session
+              to get started.
+            </p>
+
+            <a
+              mat-flat-button
+              routerLink="/schedule-meeting"
+              class="mt-6 h-11! rounded-xl! px-5!">
+              <mat-icon>add</mat-icon>
+              Schedule a meeting
+            </a>
+
+          </div>
+        }
+      </div>
+
+
+      <!-- ======================================================= -->
+      <!-- PAST MEETINGS -->
+      <!-- ======================================================= -->
+
+      <div class="mt-16">
+
+        <div class="flex items-end justify-between">
+          <div>
+            <p
+              class="text-sm font-semibold uppercase tracking-wider text-primary">
+              Your history
+            </p>
+
+            <h2 class="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+              Past meetings
+            </h2>
+
+            <p class="mt-3 text-on-surface-variant">
+              Review your completed sessions and share feedback.
+            </p>
+          </div>
+
+          <div
+            class="hidden items-center gap-2 rounded-full bg-surface-container px-3 py-1.5 text-sm text-on-surface-variant sm:flex">
+            <mat-icon class="h-5! w-5! text-[20px]!">
+              history
+            </mat-icon>
+
+            <span>{{ pastMeetings.length }} completed</span>
+          </div>
+        </div>
+
+
+        <div class="mt-8 space-y-5">
+
+          @for (meeting of pastMeetings; track meeting.id) {
+
+            <article
+              class="rounded-3xl border border-outline-variant bg-surface-container p-6">
+
+              <div
+                class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+
+                <!-- Meeting information -->
+                <div class="flex items-start gap-4">
+
+                  <div
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-secondary-container text-lg font-bold text-on-secondary-container">
+                    {{ meeting.avatar }}
+                  </div>
+
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+
+                      <h3 class="font-bold">
+                        {{ meeting.title }}
+                      </h3>
+
+                      <span
+                        class="rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-on-surface-variant">
+                        Completed
+                      </span>
+
+                    </div>
+
+                    <p class="mt-1 text-sm text-on-surface-variant">
+                      {{ meeting.instructor }}
+                      ·
+                      {{ meeting.instructorRole }}
+                    </p>
+
+                    <div
+                      class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-on-surface-variant">
+
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="h-4! w-4! text-[16px]!">
+                          calendar_month
+                        </mat-icon>
+
+                        <span>{{ meeting.date }}</span>
+                      </div>
+
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="h-4! w-4! text-[16px]!">
+                          schedule
+                        </mat-icon>
+
+                        <span>
+                          {{ meeting.time }}
+                          ·
+                          {{ meeting.duration }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+                <!-- Feedback -->
+                <div
+                  class="flex flex-col gap-4 border-t border-outline-variant pt-5 lg:min-w-72 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+
+                  @if (meeting.feedback?.submitted) {
+
+                    <div>
+
+                      <div class="flex items-center gap-2">
+
+                        <mat-icon
+                          class="text-primary">
+                          rate_review
+                        </mat-icon>
+
+                        <span class="font-semibold">
+                          Feedback submitted
+                        </span>
+
+                      </div>
+
+                      <div class="mt-2 flex items-center gap-1">
+
+                        @for (star of [1, 2, 3, 4, 5]; track star) {
+                          <mat-icon
+                            class="h-5! w-5! text-[20px]!"
+                            [class.text-primary]="
+                              star <= (meeting.feedback?.rating ?? 0)
+                            "
+                            [class.text-outline]="
+                              star > (meeting.feedback?.rating ?? 0)
+                            ">
+                            star
+                          </mat-icon>
+                        }
+
+                        <span class="ml-2 text-sm font-semibold">
+                          {{ meeting.feedback?.rating }}/5
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                    <button
+                      mat-stroked-button
+                      class="h-10! rounded-xl!">
+                      <mat-icon>visibility</mat-icon>
+                      View feedback
+                    </button>
+
+                  } @else {
+
+                    <div>
+
+                      <div class="flex items-center gap-2">
+
+                        <mat-icon class="text-primary">
+                          rate_review
+                        </mat-icon>
+
+                        <span class="font-semibold">
+                          Feedback pending
+                        </span>
+
+                      </div>
+
+                      <p class="mt-1 text-sm text-on-surface-variant">
+                        Tell us how your meeting went.
+                      </p>
+
+                    </div>
+
+                    <button
+                      mat-flat-button
+                      class="h-10! rounded-xl!">
+                      <mat-icon>rate_review</mat-icon>
+                      Give feedback
+                    </button>
+
+                  }
+
+                </div>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</main>
