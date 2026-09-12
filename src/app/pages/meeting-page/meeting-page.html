@@ -324,6 +324,18 @@
             </article>
 
           }
+          @if (pastMeetings.length > 0) {
+
+            <mat-paginator
+              class="mt-8! bg-transparent!"
+              [length]="pastMeetings.length"
+              [pageSize]="currentPageSize"
+              [pageSizeOptions]="[5, 10, 25]"
+              [showFirstLastButtons]="true"
+              (page)="onPastMeetingsPageChange($event)">
+            </mat-paginator>
+
+          }
 
         </div>
 

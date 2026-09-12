@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { InstructorProfileDialog } from './instructor-profile-dialog';
 
 export interface Instructor {
@@ -30,6 +31,7 @@ export interface Instructor {
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatPaginatorModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './instructor-page.html',
@@ -38,9 +40,10 @@ export interface Instructor {
 export class InstructorPage {
   protected readonly searchQuery = signal('');
   protected readonly selectedExperience = signal('Any experience');
-  protected readonly currentPage = signal(1);
 
-  protected readonly pageSize = 6;
+  // Converted pagination state to signals so computed() tracks changes
+  protected readonly currentPageIndex = signal(0);
+  protected readonly pageSize = signal(4);
 
   protected readonly instructors: Instructor[] = [
     {
@@ -175,20 +178,12 @@ export class InstructorPage {
     });
   });
 
-  protected readonly totalPages = computed(() =>
-    Math.ceil(this.filteredInstructors().length / this.pageSize),
-  );
-
   protected readonly paginatedInstructors = computed(() => {
     const instructors = this.filteredInstructors();
-    const start = (this.currentPage() - 1) * this.pageSize;
+    const start = this.currentPageIndex() * this.pageSize();
 
-    return instructors.slice(start, start + this.pageSize);
+    return instructors.slice(start, start + this.pageSize());
   });
-
-  protected readonly pageNumbers = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, index) => index + 1),
-  );
 
   constructor(private readonly dialog: MatDialog) {}
 
@@ -196,18 +191,18 @@ export class InstructorPage {
     const input = event.target as HTMLInputElement;
 
     this.searchQuery.set(input.value);
-    this.currentPage.set(1);
+    this.currentPageIndex.set(0);
   }
 
   protected clearSearch(): void {
     this.searchQuery.set('');
-    this.currentPage.set(1);
+    this.currentPageIndex.set(0);
   }
 
   protected resetFilters(): void {
     this.searchQuery.set('');
     this.selectedExperience.set('Any experience');
-    this.currentPage.set(1);
+    this.currentPageIndex.set(0);
   }
 
   protected openProfile(instructor: Instructor): void {
@@ -221,25 +216,14 @@ export class InstructorPage {
     });
   }
 
-  protected changePage(page: number): void {
-    if (page < 1 || page > this.totalPages()) {
-      return;
-    }
-
-    this.currentPage.set(page);
+  protected onPageChange(event: PageEvent): void {
+    this.currentPageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
 
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
-  }
-
-  protected previousPage(): void {
-    this.changePage(this.currentPage() - 1);
-  }
-
-  protected nextPage(): void {
-    this.changePage(this.currentPage() + 1);
   }
 
   private matchesExperience(years: number, option: string): boolean {

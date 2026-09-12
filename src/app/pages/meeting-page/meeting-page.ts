@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MeetingDetailsDialog } from './meeting-details-dialog/meeting-details-dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 
 
@@ -30,13 +31,24 @@ export interface Meeting {
 
 
 @Component({
-  imports: [MatButtonModule, MatIconModule, RouterLink],
+  imports: [MatButtonModule, MatIconModule, RouterLink, MatPaginator],
   selector: 'app-meeting-page',
   styleUrl: './meeting-page.css',
   templateUrl: './meeting-page.html',
 })
 export class MeetingPage {
   private readonly dialog = inject(MatDialog);
+  protected currentPage = 0;
+  protected currentPageSize = 5;
+  protected onPastMeetingsPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
+    this.currentPageSize = event.pageSize;
+  }
+  protected get paginatedPastMeetings(): Meeting[] {
+    const startIndex = this.currentPage * this.currentPageSize;
+    const endIndex = startIndex + this.currentPageSize;
+    return this.pastMeetings.slice(startIndex, endIndex);
+  }
   protected openMeetingDetails(meeting: Meeting): void {
     this.dialog.open(MeetingDetailsDialog, {
       width: '640px',

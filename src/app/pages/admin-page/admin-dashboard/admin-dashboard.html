@@ -1,0 +1,334 @@
+<section class="bg-surface min-h-screen">
+  <!-- Admin Hero Header -->
+  <div class="border-b border-outline-variant bg-surface-container">
+    <div class="mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="mb-3 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface px-3 py-1.5 text-xs font-semibold text-primary">
+            <mat-icon class="!h-4 !w-4 !text-[16px]">admin_panel_settings</mat-icon>
+            Platform Control Center
+          </div>
+          <h1 class="text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
+            Admin Dashboard
+          </h1>
+          <p class="mt-1.5 text-sm text-on-surface-variant">
+            Manage platform skills, specializations, instructor directory, and live bookings.
+          </p>
+        </div>
+
+        <!-- Quick Metrics Overview -->
+        <div class="flex items-center gap-3">
+          <div class="rounded-2xl border border-outline-variant bg-surface p-4 text-center min-w-[110px]">
+            <p class="text-xs text-on-surface-variant font-medium">Instructors</p>
+            <p class="text-2xl font-black text-on-surface mt-0.5">{{ instructors().length }}</p>
+          </div>
+          <div class="rounded-2xl border border-outline-variant bg-surface p-4 text-center min-w-[110px]">
+            <p class="text-xs text-on-surface-variant font-medium">Skills</p>
+            <p class="text-2xl font-black text-primary mt-0.5">{{ skills().length }}</p>
+          </div>
+          <div class="rounded-2xl border border-outline-variant bg-surface p-4 text-center min-w-[110px]">
+            <p class="text-xs text-on-surface-variant font-medium">Bookings</p>
+            <p class="text-2xl font-black text-on-surface mt-0.5">{{ sessions().length }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Tabs Container -->
+  <div class="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10">
+    <mat-tab-group animationDuration="0ms" class="vartahub-admin-tabs">
+
+      <!-- TAB 1: Skills & Specializations Management -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="flex items-center gap-2 py-2">
+            <mat-icon class="!text-[18px]">category</mat-icon>
+            <span>Skills & Specializations</span>
+          </div>
+        </ng-template>
+
+        <div class="mt-8">
+          <!-- Add Skill Form Card -->
+          <div class="rounded-2xl border border-outline-variant bg-surface-container p-6 mb-8">
+            <h3 class="text-lg font-bold text-on-surface mb-4">Add New Skill or Specialization</h3>
+
+            <div class="grid gap-4 md:grid-cols-3 items-center">
+              <mat-form-field appearance="outline" class="w-full mb-[-1.25rem]">
+                <mat-label>Skill Name (e.g. Docker, GraphQL)</mat-label>
+                <input matInput [ngModel]="newSkillName()" (ngModelChange)="newSkillName.set($event)" placeholder="Enter skill name" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full mb-[-1.25rem]">
+                <mat-label>Category</mat-label>
+                <input matInput [ngModel]="newSkillCategory()" (ngModelChange)="newSkillCategory.set($event)" placeholder="e.g. Backend, Frontend" />
+              </mat-form-field>
+
+              <div>
+                <button mat-flat-button color="primary" class="h-12 w-full rounded-xl!" (click)="addSkill()">
+                  <mat-icon>add</mat-icon>
+                  Add Skill
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills Table & Paginator -->
+          <div class="rounded-2xl border border-outline-variant bg-surface overflow-hidden">
+            <div class="p-5 border-b border-outline-variant bg-surface-container">
+              <h3 class="font-bold text-on-surface">Registered Skills</h3>
+              <p class="text-xs text-on-surface-variant">List of all active skills and technologies tracked across instructors.</p>
+            </div>
+
+            <!-- Scrollable table container -->
+            <div class="overflow-x-auto">
+              <table mat-table [dataSource]="paginatedSkills()" class="w-full bg-transparent! min-w-[600px]">
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Skill / Specialization</th>
+                  <td mat-cell *matCellDef="let skill" class="!font-semibold !text-on-surface">
+                    {{ skill.name }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="category">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Category</th>
+                  <td mat-cell *matCellDef="let skill">
+                    <span class="rounded-full border border-outline-variant bg-surface-container px-3 py-1 text-xs font-medium text-on-surface">
+                      {{ skill.category }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="instructorCount">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Instructors Linked</th>
+                  <td mat-cell *matCellDef="let skill" class="text-on-surface-variant font-medium">
+                    {{ skill.instructorCount }} Instructors
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold text-right">Actions</th>
+                  <td mat-cell *matCellDef="let skill" class="text-right">
+                    <button mat-stroked-button color="warn" type="button" class="!rounded-lg !border-red-200 hover:!bg-red-50" (click)="removeSkill(skill.id)">
+                      <mat-icon class="!text-red-600">delete</mat-icon>
+                      Remove
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedSkillColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedSkillColumns;" class="hover:bg-surface-container/50 transition"></tr>
+              </table>
+            </div>
+
+            <mat-paginator
+              class="border-t border-outline-variant bg-transparent!"
+              [length]="skills().length"
+              [pageSize]="skillPageSize()"
+              [pageIndex]="skillPageIndex()"
+              [pageSizeOptions]="[4, 8, 12]"
+              [showFirstLastButtons]="true"
+              (page)="onSkillPageChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- TAB 2: Instructor Overview -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="flex items-center gap-2 py-2">
+            <mat-icon class="!text-[18px]">group</mat-icon>
+            <span>Instructor Overview</span>
+          </div>
+        </ng-template>
+
+        <div class="mt-8">
+          <div class="rounded-2xl border border-outline-variant bg-surface overflow-hidden">
+            <div class="p-5 border-b border-outline-variant bg-surface-container">
+              <h3 class="font-bold text-on-surface">Instructor Directory & Specializations</h3>
+              <p class="text-xs text-on-surface-variant">Review all onboarded instructors and their designated primary specializations.</p>
+            </div>
+
+            <!-- Scrollable table container -->
+            <div class="overflow-x-auto">
+              <table mat-table [dataSource]="paginatedInstructors()" class="w-full bg-transparent! min-w-[750px]">
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Instructor Name</th>
+                  <td mat-cell *matCellDef="let inst">
+                    <div class="py-2">
+                      <p class="font-bold text-on-surface">{{ inst.name }}</p>
+                      <p class="text-xs text-on-surface-variant">{{ inst.email }}</p>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="role">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Role</th>
+                  <td mat-cell *matCellDef="let inst" class="text-on-surface-variant text-sm">
+                    {{ inst.role }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="specialization">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Specialization</th>
+                  <td mat-cell *matCellDef="let inst">
+                    <span class="font-semibold text-primary">
+                      {{ inst.specialization }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="experience">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Experience</th>
+                  <td mat-cell *matCellDef="let inst" class="text-on-surface-variant">
+                    {{ inst.experience }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rating">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Rating</th>
+                  <td mat-cell *matCellDef="let inst">
+                    <div class="flex items-center gap-1 font-bold text-on-surface">
+                      <mat-icon class="!h-4 !w-4 !text-[16px] text-amber-500">star</mat-icon>
+                      {{ inst.rating }}
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Status</th>
+                  <td mat-cell *matCellDef="let inst">
+                    <span class="rounded-full px-3 py-1 text-xs font-semibold"
+                          [class.bg-emerald-100]="inst.status === 'Active'"
+                          [class.text-emerald-800]="inst.status === 'Active'"
+                          [class.bg-amber-100]="inst.status === 'Pending'"
+                          [class.text-amber-800]="inst.status === 'Pending'">
+                      {{ inst.status }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold text-right">Actions</th>
+                  <td mat-cell *matCellDef="let inst" class="text-right">
+                    <button mat-stroked-button type="button" class="!rounded-lg" (click)="toggleInstructorStatus(inst.id)">
+                      Toggle Status
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedInstructorColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedInstructorColumns;" class="hover:bg-surface-container/50 transition"></tr>
+              </table>
+            </div>
+
+            <mat-paginator
+              class="border-t border-outline-variant bg-transparent!"
+              [length]="instructors().length"
+              [pageSize]="instructorPageSize()"
+              [pageIndex]="instructorPageIndex()"
+              [pageSizeOptions]="[4, 8, 12]"
+              [showFirstLastButtons]="true"
+              (page)="onInstructorPageChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- TAB 3: Session & Booking Monitor -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="flex items-center gap-2 py-2">
+            <mat-icon class="!text-[18px]">event_note</mat-icon>
+            <span>Booking Monitor</span>
+          </div>
+        </ng-template>
+
+        <div class="mt-8">
+          <div class="rounded-2xl border border-outline-variant bg-surface overflow-hidden">
+            <div class="p-5 border-b border-outline-variant bg-surface-container">
+              <h3 class="font-bold text-on-surface">Platform Bookings & Sessions</h3>
+              <p class="text-xs text-on-surface-variant">Monitor upcoming and completed mentorship sessions across the platform.</p>
+            </div>
+
+            <!-- Scrollable table container -->
+            <div class="overflow-x-auto">
+              <table mat-table [dataSource]="paginatedSessions()" class="w-full bg-transparent! min-w-[750px]">
+                <ng-container matColumnDef="student">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Student Name</th>
+                  <td mat-cell *matCellDef="let s" class="font-bold text-on-surface">
+                    {{ s.studentName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="instructor">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Instructor</th>
+                  <td mat-cell *matCellDef="let s" class="text-primary font-semibold">
+                    {{ s.instructorName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="topic">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Session Topic</th>
+                  <td mat-cell *matCellDef="let s" class="text-on-surface-variant text-sm">
+                    {{ s.topic }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Date & Time</th>
+                  <td mat-cell *matCellDef="let s" class="text-on-surface-variant text-xs font-medium">
+                    {{ s.date }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold">Status</th>
+                  <td mat-cell *matCellDef="let s">
+                    <span class="rounded-full px-3 py-1 text-xs font-semibold"
+                          [class.bg-blue-100]="s.status === 'Upcoming'"
+                          [class.text-blue-800]="s.status === 'Upcoming'"
+                          [class.bg-emerald-100]="s.status === 'Completed'"
+                          [class.text-emerald-800]="s.status === 'Completed'"
+                          [class.bg-red-100]="s.status === 'Cancelled'"
+                          [class.text-red-800]="s.status === 'Cancelled'">
+                      {{ s.status }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef class="!font-bold text-right">Actions</th>
+                  <td mat-cell *matCellDef="let s" class="text-right">
+                    @if (s.status === 'Upcoming') {
+                      <button mat-stroked-button color="warn" type="button" class="!rounded-lg !border-red-200 hover:!bg-red-50 text-xs" (click)="cancelSession(s.id)">
+                        Cancel Session
+                      </button>
+                    } @else {
+                      <span class="text-xs text-on-surface-variant font-medium">No actions</span>
+                    }
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedSessionColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedSessionColumns;" class="hover:bg-surface-container/50 transition"></tr>
+              </table>
+            </div>
+
+            <mat-paginator
+              class="border-t border-outline-variant bg-transparent!"
+              [length]="sessions().length"
+              [pageSize]="sessionPageSize()"
+              [pageIndex]="sessionPageIndex()"
+              [pageSizeOptions]="[4, 8, 12]"
+              [showFirstLastButtons]="true"
+              (page)="onSessionPageChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</section>

@@ -121,7 +121,7 @@
 
           <mat-select
             [value]="selectedExperience()"
-            (valueChange)="selectedExperience.set($event); currentPage.set(1)"
+            (valueChange)="selectedExperience.set($event); currentPageIndex.set(0)"
           >
             @for (option of experienceOptions; track option) {
               <mat-option [value]="option">
@@ -237,19 +237,6 @@
               </div>
             </div>
 
-            <!-- Availability -->
-            <!--
-            <div
-              class="mt-6 flex items-center gap-2 text-sm font-medium text-on-surface"
-            >
-              <span
-                class="h-2 w-2 rounded-full bg-primary"
-              ></span>
-
-              {{ instructor.availability }}
-            </div>
-            -->
-
             <!-- View Profile -->
             <button
               mat-stroked-button
@@ -263,56 +250,17 @@
           </article>
         }
       </div>
+      <!-- Angular Material Paginator with Signal Bindings -->
+      <mat-paginator
+        class="mt-8! bg-transparent!"
+        [length]="filteredInstructors().length"
+        [pageSize]="pageSize()"
+        [pageIndex]="currentPageIndex()"
+        [pageSizeOptions]="[4, 8, 12]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
 
-      <!-- Pagination -->
-      @if (totalPages() > 1) {
-        <div
-          class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-outline-variant pt-6 sm:flex-row"
-        >
-          <p class="text-sm text-on-surface-variant">
-            Page {{ currentPage() }} of {{ totalPages() }}
-          </p>
-
-          <div class="flex items-center gap-2">
-            <button
-              mat-stroked-button
-              type="button"
-              class="h-10! rounded-xl!"
-              [disabled]="currentPage() === 1"
-              (click)="previousPage()"
-            >
-              <mat-icon>chevron_left</mat-icon>
-              Previous
-            </button>
-
-            <div class="flex items-center gap-1">
-              @for (page of pageNumbers(); track page) {
-                <button
-                  mat-icon-button
-                  type="button"
-                  [attr.aria-label]="'Go to page ' + page"
-                  [class.!bg-primary]="currentPage() === page"
-                  [class.!text-on-primary]="currentPage() === page"
-                  (click)="changePage(page)"
-                >
-                  {{ page }}
-                </button>
-              }
-            </div>
-
-            <button
-              mat-stroked-button
-              type="button"
-              class="h-10! rounded-xl!"
-              [disabled]="currentPage() === totalPages()"
-              (click)="nextPage()"
-            >
-              Next
-              <mat-icon>chevron_right</mat-icon>
-            </button>
-          </div>
-        </div>
-      }
     } @else {
       <!-- Empty State -->
       <div
@@ -347,129 +295,4 @@
       </div>
     }
   </div>
-
-  <!-- Why Instructor -->
-<!--  <div class="border-t border-outline-variant bg-surface-container">-->
-<!--    <div class="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">-->
-<!--      <div class="max-w-2xl">-->
-<!--        <p-->
-<!--          class="text-sm font-bold uppercase tracking-wider text-primary"-->
-<!--        >-->
-<!--          Why learn with an instructor?-->
-<!--        </p>-->
-
-<!--        <h2-->
-<!--          class="mt-2 text-3xl font-black tracking-tight text-on-surface sm:text-4xl"-->
-<!--        >-->
-<!--          Personalized guidance that moves you forward.-->
-<!--        </h2>-->
-<!--      </div>-->
-
-<!--      <div class="mt-10 grid gap-5 md:grid-cols-3">-->
-<!--        <div-->
-<!--          class="rounded-3xl border border-outline-variant bg-surface p-6"-->
-<!--        >-->
-<!--          <div-->
-<!--            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container"-->
-<!--          >-->
-<!--            <mat-icon>school</mat-icon>-->
-<!--          </div>-->
-
-<!--          <h3 class="mt-5 text-lg font-bold text-on-surface">-->
-<!--            Learn from experience-->
-<!--          </h3>-->
-
-<!--          <p-->
-<!--            class="mt-2 text-sm leading-6 text-on-surface-variant"-->
-<!--          >-->
-<!--            Get practical knowledge from professionals who have solved-->
-<!--            real engineering and interview problems.-->
-<!--          </p>-->
-<!--        </div>-->
-
-<!--        <div-->
-<!--          class="rounded-3xl border border-outline-variant bg-surface p-6"-->
-<!--        >-->
-<!--          <div-->
-<!--            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container"-->
-<!--          >-->
-<!--            <mat-icon>target</mat-icon>-->
-<!--          </div>-->
-
-<!--          <h3 class="mt-5 text-lg font-bold text-on-surface">-->
-<!--            Focus on your goals-->
-<!--          </h3>-->
-
-<!--          <p-->
-<!--            class="mt-2 text-sm leading-6 text-on-surface-variant"-->
-<!--          >-->
-<!--            Choose an instructor based on your target technology,-->
-<!--            interview type, experience level and learning goals.-->
-<!--          </p>-->
-<!--        </div>-->
-
-<!--        <div-->
-<!--          class="rounded-3xl border border-outline-variant bg-surface p-6"-->
-<!--        >-->
-<!--          <div-->
-<!--            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container"-->
-<!--          >-->
-<!--            <mat-icon>calendar_month</mat-icon>-->
-<!--          </div>-->
-
-<!--          <h3 class="mt-5 text-lg font-bold text-on-surface">-->
-<!--            Schedule your session-->
-<!--          </h3>-->
-
-<!--          <p-->
-<!--            class="mt-2 text-sm leading-6 text-on-surface-variant"-->
-<!--          >-->
-<!--            Pick an instructor and create a meeting at a time that-->
-<!--            works for both you and your instructor.-->
-<!--          </p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  &lt;!&ndash; CTA &ndash;&gt;-->
-<!--  &lt;!&ndash;-->
-<!--  <div class="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">-->
-<!--    <div-->
-<!--      class="overflow-hidden rounded-3xl bg-primary px-6 py-12 text-on-primary sm:px-10 lg:px-14"-->
-<!--    >-->
-<!--      <div-->
-<!--        class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"-->
-<!--      >-->
-<!--        <div class="max-w-2xl">-->
-<!--          <p-->
-<!--            class="text-sm font-bold uppercase tracking-wider opacity-80"-->
-<!--          >-->
-<!--            Ready to improve?-->
-<!--          </p>-->
-
-<!--          <h2-->
-<!--            class="mt-2 text-3xl font-black tracking-tight sm:text-4xl"-->
-<!--          >-->
-<!--            Find an instructor and start your next session.-->
-<!--          </h2>-->
-
-<!--          <p class="mt-4 max-w-xl leading-7 opacity-80">-->
-<!--            Choose someone who matches your skills and goals, then-->
-<!--            create a personalized practice or learning meeting.-->
-<!--          </p>-->
-<!--        </div>-->
-
-<!--        <a-->
-<!--          mat-flat-button-->
-<!--          class="!h-12 !rounded-xl !bg-surface !px-7 !font-bold !text-on-surface"-->
-<!--          routerLink="/schedule-meeting"-->
-<!--        >-->
-<!--          Start Practicing-->
-<!--          <mat-icon>arrow_forward</mat-icon>-->
-<!--        </a>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  &ndash;&gt;-->
 </section>
