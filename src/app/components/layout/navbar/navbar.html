@@ -1,7 +1,7 @@
 <mat-sidenav-container class="h-screen z-50 bg-surface-container">
 
   <!-- Mobile Sidebar -->
-  <mat-sidenav #sidenav mode="over" position="start" class="w-72! bg-surface">
+  <mat-sidenav #sidenav mode="over" position="start" class="w-60! bg-surface">
     <div class="flex h-full flex-col">
 
       <!-- Sidebar Header -->
@@ -18,51 +18,23 @@
 
       <!-- Sidebar Navigation -->
       <mat-nav-list class="flex-1! px-2!">
-        <!-- Home -->
-        <a mat-list-item routerLink="/" routerLinkActive="selected" [routerLinkActiveOptions]="{ exact: true }" (click)="sidenav.close()">
-          <mat-icon matListItemIcon>home</mat-icon>
-          <span matListItemTitle>Home</span>
-        </a>
-
-        <!-- Instructors -->
-        <a mat-list-item routerLink="/instructor" routerLinkActive="selected" (click)="sidenav.close()">
-          <mat-icon matListItemIcon>school</mat-icon>
-          <span matListItemTitle>Instructors</span>
-        </a>
-
-        <!-- Meetings -->
-        <a mat-list-item routerLink="/meeting" routerLinkActive="selected" (click)="sidenav.close()">
-          <mat-icon matListItemIcon>video_call</mat-icon>
-          <span matListItemTitle>Meetings</span>
-        </a>
-
-        <!-- Profile -->
-        <a mat-list-item routerLink="/profile" routerLinkActive="selected" (click)="sidenav.close()">
-          <mat-icon matListItemIcon>person</mat-icon>
-          <span matListItemTitle>Profile</span>
-        </a>
-
-        <!-- Settings -->
-        <a mat-list-item routerLink="/settings" routerLinkActive="selected" (click)="sidenav.close()">
-          <mat-icon matListItemIcon>settings</mat-icon>
-          <span matListItemTitle>Settings</span>
-        </a>
+        @for (navBarItem of navBarItems; track navBarItem.title) {
+          <a mat-list-item routerLink="{{ navBarItem.route }}" routerLinkActive="selected" [routerLinkActiveOptions]="{ exact: navBarItem.routeExact }" (click)="sidenav.close()">
+            <mat-icon matListItemIcon>{{ navBarItem.icon }}</mat-icon>
+            <span matListItemTitle>{{ navBarItem.title }}</span>
+          </a>
+        }
       </mat-nav-list>
 
       <!-- Sidebar Footer -->
-      <div class="shrink-0 border-t border-outline-variant p-3">
-        @if (keycloak.authenticated) {
-          <button mat-stroked-button  class="w-full!" aria-label="Logout" (click)="logout()">
-            <mat-icon>login</mat-icon>
-            <span>Logout</span>
-          </button>
-        } @else {
-          <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
-            <mat-icon>login</mat-icon>
-            <span>Get Started</span>
-          </button>
+        @if (!keycloak.authenticated) {
+          <div class="shrink-0 border-t border-outline-variant p-3">
+            <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
+              <mat-icon>login</mat-icon>
+              <span>Get Started</span>
+            </button>
+          </div>
         }
-      </div>
     </div>
   </mat-sidenav>
 
@@ -90,45 +62,29 @@
 
       <!-- Center Navigation -->
       <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex" aria-label="Main navigation">
-        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon>home</mat-icon>
-          Home
-        </a>
-        <a mat-button routerLink="/instructor" routerLinkActive="active">
-          <mat-icon>school</mat-icon>
-          Instructors
-        </a>
-        <a mat-button routerLink="/meeting" routerLinkActive="active">
-          <mat-icon>groups</mat-icon>
-          Meetings
-        </a>
+        @for (navBarItem of navBarItems; track navBarItem.title) {
+          <a mat-button routerLink="{{ navBarItem.route }}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact:  navBarItem.routeExact }">
+            <mat-icon>{{ navBarItem.icon }}</mat-icon>
+            {{ navBarItem.title }}
+          </a>
+        }
       </nav>
 
       <!-- Right -->
       <div class="ml-auto flex items-center gap-2">
+        <button mat-icon-button (click)="themeService.toggleDarkMode()" aria-label="Toggle theme">
+          <mat-icon class="theme-transition" [class.rotate]="themeService.isDarkMode()">
+            {{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}
+          </mat-icon>
+        </button>
         @if (keycloak.authenticated) {
-          <button mat-flat-button aria-label="Logout" (click)="logout()">
-            <mat-icon>login</mat-icon>
-            <span>Logout</span>
-          </button>
+          <app-profile-menu />
         } @else {
           <button mat-flat-button aria-label="Get Started" (click)="register()">
             <mat-icon>login</mat-icon>
             <span>Get Started</span>
           </button>
         }
-        <button
-          matIconButton
-          aria-label="Toggle theme"
-          (click)="toggleDarkMode()"
-        >
-          <mat-icon
-            class="transition-transform duration-300 ease-in-out"
-            [class.rotate-180]="isDarkMode()"
-          >
-            {{ isDarkMode() ? 'dark_mode' : 'light_mode' }}
-          </mat-icon>
-        </button>
       </div>
     </mat-toolbar>
 
