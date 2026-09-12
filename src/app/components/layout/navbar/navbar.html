@@ -117,9 +117,18 @@
             <span>Get Started</span>
           </button>
         }
-<!--        <button matIconButton aria-label="Toggle theme" (click)="themeService.toggleTheme()">-->
-<!--          <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>-->
-<!--        </button>-->
+        <button
+          matIconButton
+          aria-label="Toggle theme"
+          (click)="toggleDarkMode()"
+        >
+          <mat-icon
+            class="transition-transform duration-300 ease-in-out"
+            [class.rotate-180]="isDarkMode()"
+          >
+            {{ isDarkMode() ? 'dark_mode' : 'light_mode' }}
+          </mat-icon>
+        </button>
       </div>
     </mat-toolbar>
 
