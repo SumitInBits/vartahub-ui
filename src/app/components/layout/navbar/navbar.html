@@ -1,4 +1,4 @@
-<mat-sidenav-container class="z-50 bg-surface-container">
+<mat-sidenav-container class="h-screen z-50 bg-surface-container">
 
   <!-- Mobile Sidebar -->
   <mat-sidenav #sidenav mode="over" position="start" class="w-72! bg-surface">
@@ -18,7 +18,6 @@
 
       <!-- Sidebar Navigation -->
       <mat-nav-list class="flex-1! px-2!">
-
         <!-- Home -->
         <a mat-list-item routerLink="/" routerLinkActive="selected" [routerLinkActiveOptions]="{ exact: true }" (click)="sidenav.close()">
           <mat-icon matListItemIcon>home</mat-icon>
@@ -52,23 +51,29 @@
 
       <!-- Sidebar Footer -->
       <div class="shrink-0 border-t border-outline-variant p-3">
-        <button mat-stroked-button routerLink="/" class="w-full!" (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          Logout
-        </button>
+        @if (keycloak.authenticated) {
+          <button mat-stroked-button  class="w-full!" aria-label="Logout" (click)="logout()">
+            <mat-icon>login</mat-icon>
+            <span>Logout</span>
+          </button>
+        } @else {
+          <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
+            <mat-icon>login</mat-icon>
+            <span>Get Started</span>
+          </button>
+        }
       </div>
     </div>
   </mat-sidenav>
 
-  <!-- Main Content -->
-  <mat-sidenav-content>
+  <!-- Main Content Area -->
+  <mat-sidenav-content class="flex flex-col h-full overflow-hidden">
 
-    <!-- FIXED NAVBAR -->
-    <mat-toolbar class="fixed left-0 right-0 top-0 z-9999 border-b! border-outline-variant! bg-surface!">
+    <!-- NAVBAR (Static flow, no 'fixed' class so scrollbar starts strictly below it) -->
+    <mat-toolbar class="shrink-0 border-b! border-outline-variant! bg-surface! z-10">
 
       <!-- Left -->
       <div class="flex items-center">
-
         <!-- Mobile Menu -->
         <button matIconButton aria-label="Toggle sidebar" class="md:hidden!" (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
@@ -84,22 +89,15 @@
       </div>
 
       <!-- Center Navigation -->
-
       <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex" aria-label="Main navigation">
-
-        <!-- Home -->
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>home</mat-icon>
           Home
         </a>
-
-        <!-- Instructors -->
         <a mat-button routerLink="/instructor" routerLinkActive="active">
           <mat-icon>school</mat-icon>
           Instructors
         </a>
-
-        <!-- Meetings -->
         <a mat-button routerLink="/meeting" routerLinkActive="active">
           <mat-icon>groups</mat-icon>
           Meetings
@@ -107,21 +105,31 @@
       </nav>
 
       <!-- Right -->
-
       <div class="ml-auto flex items-center gap-2">
         @if (keycloak.authenticated) {
-          <button mat-button aria-label="Logout" (click)="logout()">
-            <mat-icon>arrow_forward</mat-icon>
+          <button mat-flat-button aria-label="Logout" (click)="logout()">
+            <mat-icon>login</mat-icon>
             <span>Logout</span>
           </button>
-
         } @else {
-          <button mat-stroked-button aria-label="Get Started" (click)="register()">
-            <mat-icon>arrow_forward</mat-icon>
+          <button mat-flat-button aria-label="Get Started" (click)="register()">
+            <mat-icon>login</mat-icon>
             <span>Get Started</span>
           </button>
         }
+<!--        <button matIconButton aria-label="Toggle theme" (click)="themeService.toggleTheme()">-->
+<!--          <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>-->
+<!--        </button>-->
       </div>
     </mat-toolbar>
+
+    <!-- Scrollable Viewport Container (Isolates the scrollbar strictly to the content area) -->
+    <div class="flex-1 overflow-y-auto flex flex-col">
+      <main class="flex-1">
+        <router-outlet />
+      </main>
+      <app-footer />
+    </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -4,8 +4,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import Keycloak from 'keycloak-js';
+import { Footer } from '../footer/footer';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -24,6 +26,8 @@ import Keycloak from 'keycloak-js';
     MatNavList,
     RouterLink,
     RouterLinkActive,
+    RouterOutlet,
+    Footer,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.html',
@@ -31,6 +35,7 @@ import Keycloak from 'keycloak-js';
 })
 export class Navbar {
   protected readonly keycloak = inject(Keycloak);
+  protected readonly themeService = inject(ThemeService);
 
   async register(): Promise<void> {
     await this.keycloak.register({
