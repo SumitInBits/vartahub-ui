@@ -254,7 +254,7 @@
             <button
               mat-stroked-button
               type="button"
-              class="mt-auto top-2 !h-10 !w-full !rounded-xl"
+              class="mt-auto top-2 h-10! w-full! rounded-xl!"
               (click)="openProfile(instructor)"
             >
               <mat-icon>person</mat-icon>
@@ -277,7 +277,7 @@
             <button
               mat-stroked-button
               type="button"
-              class="!h-10 !rounded-xl"
+              class="h-10! rounded-xl!"
               [disabled]="currentPage() === 1"
               (click)="previousPage()"
             >
@@ -303,7 +303,7 @@
             <button
               mat-stroked-button
               type="button"
-              class="!h-10 !rounded-xl"
+              class="h-10! rounded-xl!"
               [disabled]="currentPage() === totalPages()"
               (click)="nextPage()"
             >
@@ -321,7 +321,7 @@
         <div
           class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container"
         >
-          <mat-icon class="!text-[30px]">search_off</mat-icon>
+          <mat-icon class="text-[30px]!">search_off</mat-icon>
         </div>
 
         <h3 class="mt-6 text-xl font-bold text-on-surface">
@@ -339,7 +339,7 @@
           mat-flat-button
           color="primary"
           type="button"
-          class="mt-6 !rounded-xl"
+          class="mt-6 rounded-xl!"
           (click)="resetFilters()"
         >
           Clear filters

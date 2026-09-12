@@ -348,19 +348,18 @@
             <!-- Footer -->
             <div class="mt-5 flex items-center justify-between border-t border-outline-variant pt-4">
               <div class="flex items-center gap-2 text-xs text-on-surface-variant">
-                <mat-icon class="h-4! w-4! text-[16px]!">
-                  people
-                </mat-icon>
-
+                <mat-icon class="h-4! w-4! text-[16px]!">people</mat-icon>
                 <span>{{ instructor.sessions }} sessions</span>
               </div>
 
-              <a
+
+              <button
                 mat-icon-button
-                [routerLink]="'/instructor'"
-                aria-label="View instructor">
+                type="button"
+                aria-label="View instructor profile"
+                (click)="openProfile(instructor)">
                 <mat-icon>arrow_forward</mat-icon>
-              </a>
+              </button>
             </div>
           </article>
         }

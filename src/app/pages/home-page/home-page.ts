@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { InstructorProfileDialog } from '../instructor-page/instructor-profile-dialog';
 
 interface Instructor {
   name: string;
@@ -30,6 +32,16 @@ interface PracticeMode {
   styleUrl: './home-page.css',
 })
 export class HomePage {
+  constructor(private readonly dialog: MatDialog) {}
+
+  openProfile(instructor: Instructor): void {
+    this.dialog.open(InstructorProfileDialog, {
+      width: 'min(92vw, 520px)',
+      maxWidth: '100vw',
+      data: instructor,
+    });
+  }
+
   protected readonly practiceModes: PracticeMode[] = [
     {
       icon: 'groups',

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { Instructor } from './instructor-page';
 
 @Component({
@@ -36,3 +36,4 @@ export class InstructorProfileDialog {
     });
   }
 }
+export class InstructorDialogComponent {}

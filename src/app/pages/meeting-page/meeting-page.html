@@ -96,8 +96,9 @@
                     View Details
                   </button>
 
-                  <a mat-flat-button [href]="meeting.meetingUrl" class="h-11! rounded-xl! font-semibold!"><mat-icon>videocam</mat-icon>
-                    Join meeting
+                  <a mat-flat-button [href]="meeting.meetingUrl" target="_blank" rel="noopener noreferrer">
+                    <mat-icon>videocam</mat-icon>
+                    Join Meeting
                   </a>
                 </div>
               </article>
@@ -119,8 +120,7 @@
             </h3>
 
             <p class="mx-auto mt-2 max-w-md text-on-surface-variant">
-              You don't have any upcoming meetings. Schedule a practice session
-              to get started.
+              You don't have any upcoming meetings. Schedule a practice session to get started.
             </p>
 
             <a
@@ -192,7 +192,7 @@
 
                       <h3 class="font-bold">
                         {{ meeting.title }}
-                      </h3>
+              <!-- ============================== -->          </h3>
 
                       <span
                         class="rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-on-surface-variant">
@@ -222,7 +222,7 @@
                         <mat-icon class="h-4! w-4! text-[16px]!">
                           schedule
                         </mat-icon>
-
+  <!-- ============================== -->
                         <span>
                           {{ meeting.time }}
                           ·
