@@ -1,0 +1,81 @@
+<div class="p-6 md:p-8 max-w-7xl mx-auto flex flex-col gap-6">
+
+  <!-- Back button and Page Header with Title and Create Button -->
+  <div class="flex flex-col gap-4">
+    <button mat-button routerLink="/admin" class="self-start rounded-xl! px-3! -ml-2 text-on-surface-variant hover:text-on-surface">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back to Admin Dashboard</span>
+    </button>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-3xl font-extrabold tracking-tight text-on-surface">Manage Specialisations</h1>
+        <p class="text-on-surface-variant text-sm md:text-base">
+          Add, configure, and monitor professional specialisations.
+        </p>
+      </div>
+
+      <button mat-flat-button class="flex items-center gap-2 self-start sm:self-auto" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        <span>Create Specialisation</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Container -->
+  <div class="bg-surface-container-low rounded-3xl border border-outline-variant/60 overflow-hidden shadow-none!">
+    <table mat-table [dataSource]="dataSource" class="w-full bg-transparent!">
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef class="bg-transparent!"> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="bg-transparent!"> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef class="bg-transparent!"> Weight </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef class="bg-transparent!"> Symbol </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-surface-container transition-colors"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" class="bg-transparent!"></mat-paginator>
+  </div>
+
+</div>
+
+<!-- Inline Dialog Template -->
+<ng-template #createDialogTemplate>
+  <h2 mat-dialog-title class="text-xl font-bold text-on-surface px-6 pt-6 m-0">Create Specialisation</h2>
+
+  <mat-dialog-content class="px-6 py-4 flex flex-col gap-4">
+    <p class="text-sm text-on-surface-variant m-0">
+      Enter the details for the new specialisation you want to add to the system.
+    </p>
+
+    <form [formGroup]="form" class="flex flex-col gap-3 mt-2">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Specialisation Name</mat-label>
+        <input matInput formControlName="name" placeholder="e.g. Cardiology" required />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        }
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="px-6 pb-6 pt-2 gap-2">
+    <button mat-button mat-dialog-close class="rounded-xl!">Cancel</button>
+    <button mat-flat-button [disabled]="form.invalid" (click)="save()" class="rounded-xl!">Create</button>
+  </mat-dialog-actions>
+</ng-template>

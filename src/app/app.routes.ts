@@ -6,7 +6,8 @@ import { ScheduleMeetingPage} from './pages/schedule-meeting-page/schedule-meeti
 import { InstructorPage } from './pages/instructor-page/instructor-page';
 import{ MeetingPage } from './pages/meeting-page/meeting-page';
 import { ProfilePage } from './pages/profile-page/profile-page';
-import { AdminDashboard} from './pages/admin-page/admin-dashboard/admin-dashboard';
+import { AdminDashboardPage} from './pages/admin/admin-dashboard-page/admin-dashboard-page';
+import { ManageSpecialisationPage } from './pages/admin/manage-specialisation-page/manage-specialisation-page';
 
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'instructor', component: InstructorPage, },
   { path: 'meeting', component: MeetingPage },
   { path: 'profile', component: ProfilePage },
-  { path: 'admin', component: AdminDashboard},
+  { path: 'admin', component: AdminDashboardPage },
+  { path: 'admin/manage-specialisations', component: ManageSpecialisationPage }
 ];
