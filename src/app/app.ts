@@ -3,7 +3,7 @@ import { Navbar } from './components/layout/navbar/navbar';
 import { OnboardingForm } from './components/onboarding-form/onboarding-form';
 
 @Component({
-  imports: [OnboardingForm],
+  imports: [Navbar],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

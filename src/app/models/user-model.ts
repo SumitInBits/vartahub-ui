@@ -32,6 +32,6 @@ export interface CompleteCreateUserRequest {
   specialisations: UserSpecialisationRequest[];
   experience: Experience;
   role: string;
-  experienceYears: number | null;
-  organizationName: string | null;
+  experienceYears: number | undefined;
+  organizationName: string | undefined;
 }
