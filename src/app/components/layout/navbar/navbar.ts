@@ -39,7 +39,6 @@ import { ProfileMenu } from '../../profile-menu/profile-menu';
 })
 export class Navbar {
   protected readonly navBarItems: NavBarItem[] = [
-    { title: 'Home', route: '/', authentication: false, icon: 'home', routeExact: true },
     {
       title: 'Instructor',
       route: '/instructor',

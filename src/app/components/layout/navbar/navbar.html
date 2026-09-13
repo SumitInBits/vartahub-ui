@@ -1,11 +1,11 @@
 <mat-sidenav-container class="h-screen z-50 bg-surface-container">
-
   <!-- Mobile Sidebar -->
   <mat-sidenav #sidenav mode="over" position="start" class="w-60! bg-surface">
     <div class="flex h-full flex-col">
-
       <!-- Sidebar Header -->
-      <div class="flex h-16 shrink-0 items-center justify-between border-b border-outline-variant px-4">
+      <div
+        class="flex h-16 shrink-0 items-center justify-between border-b border-outline-variant px-4"
+      >
         <div class="flex items-center gap-2">
           <mat-icon color="primary">groups</mat-icon>
           <span class="text-lg font-black tracking-tight">Vartahub</span>
@@ -19,7 +19,13 @@
       <!-- Sidebar Navigation -->
       <mat-nav-list class="flex-1! px-2!">
         @for (navBarItem of navBarItems; track navBarItem.title) {
-          <a mat-list-item routerLink="{{ navBarItem.route }}" routerLinkActive="selected" [routerLinkActiveOptions]="{ exact: navBarItem.routeExact }" (click)="sidenav.close()">
+          <a
+            mat-list-item
+            routerLink="{{ navBarItem.route }}"
+            routerLinkActive="selected"
+            [routerLinkActiveOptions]="{ exact: navBarItem.routeExact }"
+            (click)="sidenav.close()"
+          >
             <mat-icon matListItemIcon>{{ navBarItem.icon }}</mat-icon>
             <span matListItemTitle>{{ navBarItem.title }}</span>
           </a>
@@ -27,43 +33,52 @@
       </mat-nav-list>
 
       <!-- Sidebar Footer -->
-        @if (!keycloak.authenticated) {
-          <div class="shrink-0 border-t border-outline-variant p-3">
-            <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
-              <mat-icon>login</mat-icon>
-              <span>Get Started</span>
-            </button>
-          </div>
-        }
+      @if (!keycloak.authenticated) {
+        <div class="shrink-0 border-t border-outline-variant p-3">
+          <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
+            <mat-icon>login</mat-icon>
+            <span>Get Started</span>
+          </button>
+        </div>
+      }
     </div>
   </mat-sidenav>
 
   <!-- Main Content Area -->
   <mat-sidenav-content class="flex flex-col h-full overflow-hidden">
-
     <!-- NAVBAR (Static flow, no 'fixed' class so scrollbar starts strictly below it) -->
     <mat-toolbar class="shrink-0 border-b! border-outline-variant! bg-surface! z-10">
-
       <!-- Left -->
       <div class="flex items-center">
         <!-- Mobile Menu -->
-        <button matIconButton aria-label="Toggle sidebar" class="md:hidden!" (click)="sidenav.toggle()">
+        <button
+          matIconButton
+          aria-label="Toggle sidebar"
+          class="md:hidden!"
+          (click)="sidenav.toggle()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
 
         <!-- Logo -->
         <div class="ml-2 flex cursor-pointer items-center gap-2" routerLink="/">
           <mat-icon color="primary">groups</mat-icon>
-          <span class="text-lg font-bold tracking-tight text-on-surface">
-            Vartahub
-          </span>
+          <span class="text-lg font-bold tracking-tight text-on-surface"> Vartahub </span>
         </div>
       </div>
 
       <!-- Center Navigation -->
-      <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex" aria-label="Main navigation">
+      <nav
+        class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex"
+        aria-label="Main navigation"
+      >
         @for (navBarItem of navBarItems; track navBarItem.title) {
-          <a mat-button routerLink="{{ navBarItem.route }}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact:  navBarItem.routeExact }">
+          <a
+            mat-button
+            routerLink="{{ navBarItem.route }}"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: navBarItem.routeExact }"
+          >
             <mat-icon>{{ navBarItem.icon }}</mat-icon>
             {{ navBarItem.title }}
           </a>
@@ -95,6 +110,5 @@
       </main>
       <app-footer />
     </div>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

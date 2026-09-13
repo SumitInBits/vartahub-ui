@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { AfterViewInit, Component, computed, inject, TemplateRef, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -8,6 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Specialisation } from '../../../models/specialistation-model';
+import { createEmptyPage } from '../../../utils/global-api-util';
+import { IamService } from '../../../services/iam-service';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   imports: [
@@ -20,28 +25,35 @@ import { RouterLink } from '@angular/router';
     MatButtonModule,
     MatInput,
     RouterLink,
+    MatTooltip,
   ],
   selector: 'app-manage-specialisation-page',
   styleUrl: './manage-specialisation-page.css',
   templateUrl: './manage-specialisation-page.html',
 })
-export class ManageSpecialisationPage implements AfterViewInit {
-  private dialog = inject(MatDialog);
-  private fb = inject(FormBuilder);
-
+export class ManageSpecialisationPage {
+  displayedColumns: string[] = ['id', 'slug', 'name', 'actions'];
   @ViewChild('createDialogTemplate') createDialogTemplate!: TemplateRef<any>;
   private dialogRef?: MatDialogRef<any>;
+  private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
+  private iamService = inject(IamService);
+  protected readonly specialisationPage = toSignal(this.iamService.getSpecialisations(), {
+    initialValue: createEmptyPage<Specialisation>(10),
+  });
+  protected readonly specialisations = computed(() => this.specialisationPage().content);
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  form: FormGroup = this.fb.group({
+  protected readonly form: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
   });
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  onPageChange(event: PageEvent): void {
+    console.log('Page:', event.pageIndex);
+    console.log('Size:', event.pageSize);
+
+    // Load the requested page from backend
   }
 
   openCreateDialog(): void {
@@ -52,40 +64,25 @@ export class ManageSpecialisationPage implements AfterViewInit {
     });
   }
 
-  save(): void {
+  createSpecialisations(): void {
     if (this.form.valid) {
-      console.log('New Specialisation Created:', this.form.value);
-      this.dialogRef?.close();
+      this.iamService.createSpecialisations(this.form.value).subscribe({
+        next: () => {
+          this.dialogRef?.close();
+        },
+        error: (err) => {
+          console.error('Failed to create specialisation', err);
+        },
+      });
     }
   }
-}
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  deleteSpecialisation(id: string): void {
+    this.iamService.deleteSpecialisation(id).subscribe({
+      next: () => {},
+      error: (err) => {
+        console.error('Failed to delete specialisation', err);
+      },
+    });
+  }
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];

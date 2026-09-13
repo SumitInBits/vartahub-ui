@@ -4,7 +4,8 @@
     <div class="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10 lg:py-20">
       <div class="max-w-3xl">
         <div
-          class="mb-5 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface px-4 py-2 text-sm font-medium text-primary">
+          class="mb-5 inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface px-4 py-2 text-sm font-medium text-primary"
+        >
           <mat-icon class="!h-5 !w-5 !text-[20px]">school</mat-icon>
           Learn from experienced professionals
         </div>
@@ -17,32 +18,23 @@
           for your goals.
         </h1>
 
-        <p
-          class="mt-6 max-w-2xl text-base leading-7 text-on-surface-variant sm:text-lg"
-        >
-          Learn from experienced engineers, developers, and industry
-          professionals. Get personalized guidance, practice real-world
-          problems, and prepare with confidence.
+        <p class="mt-6 max-w-2xl text-base leading-7 text-on-surface-variant sm:text-lg">
+          Learn from experienced engineers, developers, and industry professionals. Get personalized
+          guidance, practice real-world problems, and prepare with confidence.
         </p>
 
         <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-          <div
-            class="flex items-center gap-2 text-sm font-medium text-on-surface"
-          >
+          <div class="flex items-center gap-2 text-sm font-medium text-on-surface">
             <mat-icon class="!text-primary">verified</mat-icon>
             Industry professionals
           </div>
 
-          <div
-            class="flex items-center gap-2 text-sm font-medium text-on-surface"
-          >
+          <div class="flex items-center gap-2 text-sm font-medium text-on-surface">
             <mat-icon class="!text-primary">star</mat-icon>
             Highly rated instructors
           </div>
 
-          <div
-            class="flex items-center gap-2 text-sm font-medium text-on-surface"
-          >
+          <div class="flex items-center gap-2 text-sm font-medium text-on-surface">
             <mat-icon class="!text-primary">calendar_month</mat-icon>
             Flexible scheduling
           </div>
@@ -54,32 +46,22 @@
   <!-- Browse Instructors -->
   <div class="border-b border-outline-variant bg-surface-container">
     <div class="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10">
-      <div
-        class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"
-      >
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p class="text-sm font-bold uppercase tracking-wider text-primary">
             Instructor directory
           </p>
 
-          <h2
-            class="mt-2 text-3xl font-black tracking-tight text-on-surface"
-          >
+          <h2 class="mt-2 text-3xl font-black tracking-tight text-on-surface">
             Explore instructors
           </h2>
 
           <p class="mt-2 max-w-2xl text-on-surface-variant">
-            Find an instructor based on your skills, experience level, and
-            learning goals.
+            Find an instructor based on your skills, experience level, and learning goals.
           </p>
         </div>
 
-        <button
-          mat-stroked-button
-          type="button"
-          class="!rounded-xl"
-          (click)="resetFilters()"
-        >
+        <button mat-stroked-button type="button" class="!rounded-xl" (click)="resetFilters()">
           <mat-icon>restart_alt</mat-icon>
           Reset filters
         </button>
@@ -141,9 +123,7 @@
         {{ filteredInstructors().length }} instructors found
       </p>
 
-      <h2
-        class="mt-1 text-3xl font-black tracking-tight text-on-surface"
-      >
+      <h2 class="mt-1 text-3xl font-black tracking-tight text-on-surface">
         Choose your instructor
       </h2>
     </div>
@@ -173,14 +153,8 @@
                 </p>
               </div>
 
-              <div
-                class="flex shrink-0 items-center gap-1 pl-2 text-xs font-bold text-on-surface"
-              >
-                <mat-icon
-                  class="h-4! w-4! text-[16px]! text-primary!"
-                >
-                  star
-                </mat-icon>
+              <div class="flex shrink-0 items-center gap-1 pl-2 text-xs font-bold text-on-surface">
+                <mat-icon class="h-4! w-4! text-[16px]! text-primary!"> star </mat-icon>
 
                 {{ instructor.rating }}
               </div>
@@ -217,9 +191,7 @@
               class="mt-4 flex items-center justify-between border-t border-outline-variant pt-4"
             >
               <div>
-                <p class="text-[11px] text-on-surface-variant">
-                  Experience
-                </p>
+                <p class="text-[11px] text-on-surface-variant">Experience</p>
 
                 <p class="text-sm font-bold text-on-surface">
                   {{ instructor.experience }}
@@ -227,9 +199,7 @@
               </div>
 
               <div>
-                <p class="text-[11px] text-on-surface-variant">
-                  Sessions
-                </p>
+                <p class="text-[11px] text-on-surface-variant">Sessions</p>
 
                 <p class="text-sm font-bold text-on-surface">
                   {{ instructor.sessions }}
@@ -258,9 +228,9 @@
         [pageIndex]="currentPageIndex()"
         [pageSizeOptions]="[4, 8, 12]"
         [showFirstLastButtons]="true"
-        (page)="onPageChange($event)">
+        (page)="onPageChange($event)"
+      >
       </mat-paginator>
-
     } @else {
       <!-- Empty State -->
       <div
@@ -272,15 +242,10 @@
           <mat-icon class="text-[30px]!">search_off</mat-icon>
         </div>
 
-        <h3 class="mt-6 text-xl font-bold text-on-surface">
-          No instructors found
-        </h3>
+        <h3 class="mt-6 text-xl font-bold text-on-surface">No instructors found</h3>
 
-        <p
-          class="mt-2 max-w-md text-sm leading-6 text-on-surface-variant"
-        >
-          Try changing your search or filters to find instructors matching
-          your requirements.
+        <p class="mt-2 max-w-md text-sm leading-6 text-on-surface-variant">
+          Try changing your search or filters to find instructors matching your requirements.
         </p>
 
         <button

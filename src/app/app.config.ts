@@ -7,7 +7,18 @@ import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angu
 import { routes } from './app.routes';
 import { provideKeycloakAuth } from './keycloak.auth.provider';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { includeBearerTokenInterceptor } from 'keycloak-angular';
+import {
+  createInterceptorCondition,
+  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+  IncludeBearerTokenCondition,
+  includeBearerTokenInterceptor,
+} from 'keycloak-angular';
+import { baseUrlInterceptor } from './interceptors/base-url-interceptor';
+import { environment } from '../environments/environment.development';
+
+const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+  urlPattern: new RegExp(`^${environment.baseUrl}(\\/.*)?$`, 'i'),
+});
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +30,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideKeycloakAuth(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+    provideHttpClient(withInterceptors([baseUrlInterceptor, includeBearerTokenInterceptor])),
+    {
+      provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+      useValue: [urlCondition],
+    },
   ],
 };
-

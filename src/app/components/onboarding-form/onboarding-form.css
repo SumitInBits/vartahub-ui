@@ -1,0 +1,34 @@
+.account-stepper {
+  display: block;
+  height: 100%;
+}
+
+/*
+ * Angular Material's horizontal stepper has:
+ *
+ * mat-stepper
+ *   -> .mat-horizontal-stepper-wrapper
+ *      -> header
+ *      -> .mat-horizontal-content-container
+ *         -> .mat-horizontal-stepper-content
+ *
+ * We let Material manage those containers.
+ * We only make our own inner content scroll.
+ */
+
+.account-step-scroll {
+  max-height: calc(92vh - 220px);
+  overflow-y: auto;
+
+  padding: 24px;
+
+  /*
+   * Better scrolling on touch devices
+   */
+  -webkit-overflow-scrolling: touch;
+
+  /*
+   * Prevent scrollbar from causing layout jump
+   */
+  scrollbar-gutter: stable;
+}

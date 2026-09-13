@@ -10,27 +10,27 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './footer.html',
   styleUrl: './footer.css',
 })
-export class Footer{
+export class Footer {
   protected readonly currentYear = new Date().getFullYear();
 
   protected readonly platformLinks = [
-    { label: 'Peer Interviews', route: '/schedule-meeting', },
-    { label: 'AI Interviews', route: '/ai-interview', },
-    { label: 'Instructors', route: '/instructor', },
-    { label: 'Dashboard', route: '/home', },
+    { label: 'Peer Interviews', route: '/schedule-meeting' },
+    { label: 'AI Interviews', route: '/ai-interview' },
+    { label: 'Instructors', route: '/instructor' },
+    { label: 'Dashboard', route: '/home' },
   ];
 
   protected readonly supportLinks = [
-    { label: 'About Vartahub', route: '/about', },
-    { label: 'Contact Us', route: '/contact', },
-    { label: 'FAQ & Help Center', route: '/help', },
-    { label: 'Instructor Portal', route: '/instructor', },
+    { label: 'About Vartahub', route: '/about' },
+    { label: 'Contact Us', route: '/contact' },
+    { label: 'FAQ & Help Center', route: '/help' },
+    { label: 'Instructor Portal', route: '/instructor' },
   ];
 
   protected readonly legalLinks = [
-    { label: 'Privacy Policy', route: '/privacy-policy', },
-    { label: 'Terms of Service', route: '/terms', },
-    { label: 'Interview Guidelines', route: '/interview-guidelines', },
-    { label: 'Cookie Settings', route: '/cookie-settings', },
+    { label: 'Privacy Policy', route: '/privacy-policy' },
+    { label: 'Terms of Service', route: '/terms' },
+    { label: 'Interview Guidelines', route: '/interview-guidelines' },
+    { label: 'Cookie Settings', route: '/cookie-settings' },
   ];
 }

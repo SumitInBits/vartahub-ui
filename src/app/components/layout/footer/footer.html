@@ -1,57 +1,44 @@
 <footer
-  class="mt-auto border-t border-outline-variant bg-surface-container px-6 pb-5 pt-10 text-on-surface-variant lg:px-12">
-  <div
-    class="mx-auto mb-10 grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
+  class="mt-auto border-t border-outline-variant bg-surface-container px-6 pb-5 pt-10 text-on-surface-variant lg:px-12"
+>
+  <div class="mx-auto mb-10 grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
     <!-- Brand & Platform Info -->
     <div class="space-y-4 lg:col-span-2">
       <a
         routerLink="/home"
         class="flex w-fit cursor-pointer items-center gap-3"
-        aria-label="Vartahub Home">
-        <div
-          class="flex items-center justify-center rounded-xl bg-primary p-2 text-on-primary">
+        aria-label="Vartahub Home"
+      >
+        <div class="flex items-center justify-center rounded-xl bg-primary p-2 text-on-primary">
           <mat-icon>groups</mat-icon>
         </div>
 
-        <span class="text-lg font-bold tracking-tight text-on-surface">
-          Vartahub
-        </span>
+        <span class="text-lg font-bold tracking-tight text-on-surface"> Vartahub </span>
       </a>
 
-      <p
-        class="max-w-sm text-xs leading-relaxed text-on-surface-variant">
-        Interview practice made smarter. Practice with peers who share your
-        skills, learn directly from experienced instructors, or prepare with
-        AI whenever you want.
+      <p class="max-w-sm text-xs leading-relaxed text-on-surface-variant">
+        Interview practice made smarter. Practice with peers who share your skills, learn directly
+        from experienced instructors, or prepare with AI whenever you want.
       </p>
 
       <!-- Platform Status -->
       <div
-        class="inline-flex items-center gap-2.5 rounded-full border border-outline-variant bg-surface px-3 py-1.5 text-xs text-on-surface-variant">
-        <span
-          class="h-2 w-2 rounded-full bg-primary"
-          aria-hidden="true">
-        </span>
+        class="inline-flex items-center gap-2.5 rounded-full border border-outline-variant bg-surface px-3 py-1.5 text-xs text-on-surface-variant"
+      >
+        <span class="h-2 w-2 rounded-full bg-primary" aria-hidden="true"> </span>
 
-        <span>
-          Smart skill-based matching
-        </span>
+        <span> Smart skill-based matching </span>
       </div>
     </div>
 
     <!-- Platform -->
     <div class="space-y-4">
-      <h3
-        class="text-xs font-bold uppercase tracking-wider text-on-surface">
-        Platform
-      </h3>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface">Platform</h3>
 
       <ul class="space-y-2.5 text-xs">
         @for (link of platformLinks; track link.label) {
           <li>
-            <a
-              [routerLink]="link.route"
-              class="transition-colors duration-150 hover:text-primary">
+            <a [routerLink]="link.route" class="transition-colors duration-150 hover:text-primary">
               {{ link.label }}
             </a>
           </li>
@@ -61,17 +48,12 @@
 
     <!-- Support -->
     <div class="space-y-4">
-      <h3
-        class="text-xs font-bold uppercase tracking-wider text-on-surface">
-        Support
-      </h3>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface">Support</h3>
 
       <ul class="space-y-2.5 text-xs">
         @for (link of supportLinks; track link.label) {
           <li>
-            <a
-              [routerLink]="link.route"
-              class="transition-colors duration-150 hover:text-primary">
+            <a [routerLink]="link.route" class="transition-colors duration-150 hover:text-primary">
               {{ link.label }}
             </a>
           </li>
@@ -81,17 +63,12 @@
 
     <!-- Legal -->
     <div class="space-y-4">
-      <h3
-        class="text-xs font-bold uppercase tracking-wider text-on-surface">
-        Legal & Policy
-      </h3>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface">Legal & Policy</h3>
 
       <ul class="space-y-2.5 text-xs">
         @for (link of legalLinks; track link.label) {
           <li>
-            <a
-              [routerLink]="link.route"
-              class="transition-colors duration-150 hover:text-primary">
+            <a [routerLink]="link.route" class="transition-colors duration-150 hover:text-primary">
               {{ link.label }}
             </a>
           </li>
@@ -102,15 +79,21 @@
 
   <!-- Bottom Divider & Copyright -->
   <div
-    class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-outline-variant pt-8 text-xs sm:flex-row">
+    class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-outline-variant pt-8 text-xs sm:flex-row"
+  >
     <p class="text-on-surface-variant">
       © {{ currentYear }} Vartahub. All rights reserved.
-<!--      <span>| Interview practice made smarter. </span>-->
+      <!--      <span>| Interview practice made smarter. </span>-->
     </p>
 
     <p class="text-sm text-on-surface-variant">
       Powered by
-      <a href="https://xorgrid.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-on-surface transition-colors hover:text-primary">
+      <a
+        href="https://xorgrid.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-semibold text-on-surface transition-colors hover:text-primary"
+      >
         XorGrid
       </a>
     </p>
@@ -118,9 +101,7 @@
     <div class="flex items-center gap-6">
       <!-- Network -->
       <span class="flex items-center gap-1 text-on-surface-variant">
-        <mat-icon class="h-4! w-4! text-[16px]! text-primary">
-          verified
-        </mat-icon>
+        <mat-icon class="h-4! w-4! text-[16px]! text-primary"> verified </mat-icon>
 
         Skill-based Network
       </span>
@@ -130,10 +111,9 @@
         <a
           href="#"
           aria-label="Vartahub social media"
-          class="text-on-surface-variant transition-colors hover:text-primary">
-          <mat-icon class="h-5! w-5! text-[20px]!">
-            share
-          </mat-icon>
+          class="text-on-surface-variant transition-colors hover:text-primary"
+        >
+          <mat-icon class="h-5! w-5! text-[20px]!"> share </mat-icon>
         </a>
       </div>
     </div>

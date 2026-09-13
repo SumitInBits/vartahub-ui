@@ -9,9 +9,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AbstractControl,FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 
-export const availabilityTimeValidator: ValidatorFn = (control: AbstractControl,): ValidationErrors | null => {
+export const availabilityTimeValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
   const availableFrom = control.get('availableFrom')?.value;
   const availableUntil = control.get('availableUntil')?.value;
   if (!availableFrom || !availableUntil) {

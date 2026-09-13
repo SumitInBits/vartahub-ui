@@ -1,5 +1,4 @@
 <div class="p-6 md:p-8 max-w-7xl mx-auto flex flex-col gap-8">
-
   <!-- Page Header -->
   <div class="flex flex-col gap-1">
     <h1 class="text-3xl font-extrabold tracking-tight text-on-surface">Admin Dashboard</h1>
@@ -13,24 +12,30 @@
     @for (module of adminModules; track module.title) {
       <mat-card
         class="rounded-3xl! border border-outline-variant/60 shadow-none! bg-surface-container-low transition-all duration-200 hover:shadow-md hover:border-primary/50 group flex flex-col justify-between overflow-hidden cursor-pointer"
-        [routerLink]="module.route">
-
+        [routerLink]="module.route"
+      >
         <mat-card-content class="p-6 flex flex-col gap-5">
           <!-- Top Row: Icon on left, Configure action pushed to the right -->
           <div class="flex items-center justify-between">
-            <div class="w-12 h-12 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center transition-transform group-hover:scale-110">
+            <div
+              class="w-12 h-12 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center transition-transform group-hover:scale-110"
+            >
               <mat-icon class="text-2xl">{{ module.icon }}</mat-icon>
             </div>
 
             <span class="text-xs font-semibold text-primary flex items-center gap-1">
               Configure
-              <mat-icon class="text-sm transition-transform group-hover:translate-x-1">arrow_forward</mat-icon>
+              <mat-icon class="text-sm transition-transform group-hover:translate-x-1"
+                >arrow_forward</mat-icon
+              >
             </span>
           </div>
 
           <!-- Titles & Description with added spacing from the top row -->
           <div class="mt-2 flex flex-col gap-1">
-            <h2 class="text-lg font-bold text-on-surface group-hover:text-primary transition-colors">
+            <h2
+              class="text-lg font-bold text-on-surface group-hover:text-primary transition-colors"
+            >
               {{ module.title }}
             </h2>
             <p class="text-sm text-on-surface-variant leading-relaxed">
@@ -41,5 +46,4 @@
       </mat-card>
     }
   </div>
-
 </div>

@@ -4,10 +4,11 @@
     <div class="mx-auto max-w-5xl px-6 py-10 sm:px-8 lg:px-10">
       <div class="max-w-3xl">
         <p class="text-sm font-bold uppercase tracking-wider text-primary">Schedule a meeting</p>
-        <h1 class="mt-2 text-3xl font-black tracking-tight text-on-surface sm:text-4xl">Create your practice session</h1>
+        <h1 class="mt-2 text-3xl font-black tracking-tight text-on-surface sm:text-4xl">
+          Create your practice session
+        </h1>
         <p class="mt-3 max-w-2xl text-base leading-7 text-on-surface-variant">
-          Choose your skill, experience level, preferred time, and who you
-          want to practice with.
+          Choose your skill, experience level, preferred time, and who you want to practice with.
         </p>
       </div>
     </div>
@@ -20,19 +21,30 @@
       @if (selectedInstructorId()) {
         <section class="rounded-2xl border border-primary bg-primary-container p-5">
           <div class="flex items-start gap-4">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary">
+            <div
+              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary"
+            >
               <mat-icon>school</mat-icon>
             </div>
 
             <div class="min-w-0 flex-1">
-              <p class="text-xs font-bold uppercase tracking-wider text-on-primary-container">Selected instructor</p>
-              <h2 class="mt-1 text-lg font-black text-on-primary-container">{{ selectedInstructorName() }}</h2>
+              <p class="text-xs font-bold uppercase tracking-wider text-on-primary-container">
+                Selected instructor
+              </p>
+              <h2 class="mt-1 text-lg font-black text-on-primary-container">
+                {{ selectedInstructorName() }}
+              </h2>
               <p class="mt-1 text-sm leading-6 text-on-primary-container">
                 Your meeting will be scheduled with this instructor.
               </p>
             </div>
 
-            <button mat-stroked-button type="button" class="shrink-0! rounded-xl!" (click)="chooseAnotherInstructor()">
+            <button
+              mat-stroked-button
+              type="button"
+              class="shrink-0! rounded-xl!"
+              (click)="chooseAnotherInstructor()"
+            >
               Change
             </button>
           </div>
@@ -48,8 +60,7 @@
           </h2>
 
           <p class="mt-2 text-sm leading-6 text-on-surface-variant">
-            Tell us what you want to focus on so the session can be matched
-            appropriately.
+            Tell us what you want to focus on so the session can be matched appropriately.
           </p>
         </div>
 
@@ -58,13 +69,22 @@
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Skill</mat-label>
             <mat-icon matPrefix>code</mat-icon>
-            <input matInput formControlName="skill" placeholder="Search or select a skill"
-                   [matAutocomplete]="skillAutocomplete"
-                   (input)="filterSkills($any($event.target).value)"
+            <input
+              matInput
+              formControlName="skill"
+              placeholder="Search or select a skill"
+              [matAutocomplete]="skillAutocomplete"
+              (input)="filterSkills($any($event.target).value)"
             />
 
             @if (meetingForm.get('skill')?.value) {
-              <button mat-icon-button matSuffix type="button" aria-label="Clear selected skill" (click)="removeSkill()">
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                aria-label="Clear selected skill"
+                (click)="removeSkill()"
+              >
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -76,9 +96,8 @@
             </mat-autocomplete>
 
             @if (
-              meetingForm.get('skill')?.hasError('required') &&
-              meetingForm.get('skill')?.touched
-              ) {
+              meetingForm.get('skill')?.hasError('required') && meetingForm.get('skill')?.touched
+            ) {
               <mat-error>Please select a skill.</mat-error>
             }
           </mat-form-field>
@@ -89,7 +108,9 @@
           <p class="mb-3 text-sm font-semibold text-on-surface">Your experience level</p>
           <mat-radio-group formControlName="level" class="grid gap-3 md:grid-cols-3">
             @for (level of levels; track level.value) {
-              <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4 transition hover:border-primary">
+              <label
+                class="flex cursor-pointer items-center gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4 transition hover:border-primary"
+              >
                 <mat-radio-button [value]="level.value" class="shrink-0"></mat-radio-button>
                 <mat-icon class="text-primary">{{ level.icon }}</mat-icon>
                 <span class="font-semibold text-on-surface">{{ level.label }}</span>
@@ -103,7 +124,9 @@
       <section class="rounded-3xl border border-outline-variant bg-surface p-6 shadow-sm sm:p-8">
         <div>
           <p class="text-sm font-bold uppercase tracking-wider text-primary">Schedule</p>
-          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">When are you available?</h2>
+          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">
+            When are you available?
+          </h2>
           <p class="mt-2 text-sm leading-6 text-on-surface-variant">
             Select a date and the time window that works best for you.
           </p>
@@ -115,12 +138,20 @@
             <mat-label>Date</mat-label>
             <mat-icon matPrefix>calendar_month</mat-icon>
 
-            <input matInput [matDatepicker]="datePicker" [min]="minDate" formControlName="date" placeholder="Choose a date"/>
+            <input
+              matInput
+              [matDatepicker]="datePicker"
+              [min]="minDate"
+              formControlName="date"
+              placeholder="Choose a date"
+            />
 
             <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
             <mat-datepicker #datePicker></mat-datepicker>
 
-            @if (meetingForm.get('date')?.hasError('required') && meetingForm.get('date')?.touched) {
+            @if (
+              meetingForm.get('date')?.hasError('required') && meetingForm.get('date')?.touched
+            ) {
               <mat-error>Please select a date.</mat-error>
             }
           </mat-form-field>
@@ -157,51 +188,64 @@
               }
             </mat-select>
           </mat-form-field>
-<!--          @if (meetingForm.hasError('minimumGap') && (meetingForm.get('availableFrom')?.touched ||-->
-<!--            meetingForm.get('availableUntil')?.touched)) {-->
-<!--            <p class="col-span-full -mt-1 text-sm text-error">Available until must be at least 30 minutes after available from.</p>-->
-<!--          }-->
+          <!--          @if (meetingForm.hasError('minimumGap') && (meetingForm.get('availableFrom')?.touched ||-->
+          <!--            meetingForm.get('availableUntil')?.touched)) {-->
+          <!--            <p class="col-span-full -mt-1 text-sm text-error">Available until must be at least 30 minutes after available from.</p>-->
+          <!--          }-->
         </div>
-        <div class="mt-4 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-3">
+        <div
+          class="mt-4 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-3"
+        >
           <mat-icon class="mt-0.5 shrink-0 text-primary">info</mat-icon>
 
           <p class="text-sm leading-6 text-on-surface-variant">
-<!--            <span class="font-semibold text-on-surface">Why do we need an availability window?</span>-->
-            Your selected session duration is the length of the actual meeting. The availability window tells us when you're free, so we can find a
-            suitable time for your session within that period.
+            <!--            <span class="font-semibold text-on-surface">Why do we need an availability window?</span>-->
+            Your selected session duration is the length of the actual meeting. The availability
+            window tells us when you're free, so we can find a suitable time for your session within
+            that period.
           </p>
         </div>
-     </section>
+      </section>
 
       <!-- Practice With -->
       <section class="rounded-3xl border border-outline-variant bg-surface p-6 shadow-sm sm:p-8">
         <div>
           <p class="text-sm font-bold uppercase tracking-wider text-primary">Practice with</p>
-          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">Who would you like to practice with?</h2>
+          <h2 class="mt-1 text-2xl font-black tracking-tight text-on-surface">
+            Who would you like to practice with?
+          </h2>
           <p class="mt-2 text-sm leading-6 text-on-surface-variant">
             Choose between practicing with another learner or working with an instructor.
           </p>
         </div>
 
         <mat-radio-group formControlName="practiceWith" class="mt-7 grid gap-4 md:grid-cols-2">
-          @for (option of practiceWithOptions;track option.value) {
-            <label class="flex cursor-pointer items-start gap-4 rounded-2xl border border-outline-variant bg-surface-container p-5 transition hover:border-primary">
+          @for (option of practiceWithOptions; track option.value) {
+            <label
+              class="flex cursor-pointer items-start gap-4 rounded-2xl border border-outline-variant bg-surface-container p-5 transition hover:border-primary"
+            >
               <mat-radio-button [value]="option.value" class="mt-0.5 shrink-0"></mat-radio-button>
 
-              <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-container text-on-primary-container">
+              <div
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-container text-on-primary-container"
+              >
                 <mat-icon>{{ option.icon }}</mat-icon>
               </div>
 
               <div class="min-w-0">
                 <h3 class="font-bold text-on-surface">{{ option.label }}</h3>
-                <p class="mt-1 text-sm leading-6 text-on-surface-variant">{{ option.description }}</p>
+                <p class="mt-1 text-sm leading-6 text-on-surface-variant">
+                  {{ option.description }}
+                </p>
               </div>
             </label>
           }
         </mat-radio-group>
 
         @if (selectedInstructorId()) {
-          <div class="mt-5 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4">
+          <div
+            class="mt-5 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container px-4 py-4"
+          >
             <mat-icon class="mt-0.5 shrink-0 text-primary">lock</mat-icon>
             <p class="text-sm leading-6 text-on-surface-variant">
               This meeting was started from
@@ -215,7 +259,9 @@
       <!-- Summary -->
       <section class="rounded-3xl border border-outline-variant bg-surface-container p-6 sm:p-8">
         <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary"
+          >
             <mat-icon>event_available</mat-icon>
           </div>
 
@@ -243,13 +289,25 @@
       </section>
 
       <!-- Actions -->
-      <div class="flex flex-col-reverse gap-3 border-t border-outline-variant pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button mat-stroked-button type="button" class="h-12! rounded-xl! px-6!" (click)="resetForm()">
+      <div
+        class="flex flex-col-reverse gap-3 border-t border-outline-variant pt-6 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <button
+          mat-stroked-button
+          type="button"
+          class="h-12! rounded-xl! px-6!"
+          (click)="resetForm()"
+        >
           <mat-icon>restart_alt</mat-icon>
           Reset
         </button>
 
-        <button mat-flat-button type="submit" class="h-12! rounded-xl! px-7!" [disabled]="meetingForm.invalid">
+        <button
+          mat-flat-button
+          type="submit"
+          class="h-12! rounded-xl! px-7!"
+          [disabled]="meetingForm.invalid"
+        >
           <mat-icon>calendar_month</mat-icon>
           Create Meeting
         </button>

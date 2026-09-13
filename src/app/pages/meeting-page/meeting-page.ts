@@ -6,8 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MeetingDetailsDialog } from './meeting-details-dialog/meeting-details-dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
-
-
 export interface Meeting {
   id: number;
   title: string;
@@ -28,7 +26,6 @@ export interface Meeting {
     comment?: string;
   };
 }
-
 
 @Component({
   imports: [MatButtonModule, MatIconModule, RouterLink, MatPaginator],
