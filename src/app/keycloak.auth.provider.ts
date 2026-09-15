@@ -18,11 +18,5 @@ export const provideKeycloakAuth = () =>
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
     },
-    features: [
-      withAutoRefreshToken({
-        onInactivityTimeout: 'logout',
-        sessionTimeout: 60000,
-      }),
-    ],
     providers: [AutoRefreshTokenService, UserActivityService],
   });

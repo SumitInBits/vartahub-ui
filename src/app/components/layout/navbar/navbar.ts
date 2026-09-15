@@ -5,12 +5,11 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import Keycloak from 'keycloak-js';
 import { Footer } from '../footer/footer';
-import { ThemeService } from '../../../services/theme-service';
+import { ThemeService } from '../../../services/theme/theme-service';
 import { NavBarItem } from './navbar-model';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { ProfileMenu } from '../../profile-menu/profile-menu';
+import { AuthContext } from '../../../services/auth/auth-context';
 
 @Component({
   selector: 'app-navbar',
@@ -55,12 +54,10 @@ export class Navbar {
     },
   ];
 
-  protected readonly keycloak = inject(Keycloak);
+  protected readonly authContext = inject(AuthContext);
   protected readonly themeService = inject(ThemeService);
 
   async register(): Promise<void> {
-    await this.keycloak.register({
-      redirectUri: window.location.origin + '/',
-    });
+    await this.authContext.signup();
   }
 }

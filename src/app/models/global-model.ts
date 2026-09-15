@@ -22,7 +22,7 @@ export enum Experience {
 }
 
 export enum OnboardingStatus {
-  IN_PROGRESS = 'IN_PROGRESS',
+  PENDING = 'PENDING',
   COMPLETED = 'COMPLETED',
 }
 

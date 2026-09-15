@@ -1,9 +1,9 @@
 import { inject, Service } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Specialisation, SpecialisationRequest } from '../models/specialistation-model';
-import { Page } from '../models/global-model';
-import { OnboardUserRequest, User } from '../models/user-model';
+import { Specialisation, SpecialisationRequest } from '../../models/specialistation-model';
+import { OnboardingStatus, Page } from '../../models/global-model';
+import { OnboardUserRequest, User } from '../../models/user-model';
 
 @Service()
 export class IamService {
@@ -25,6 +25,10 @@ export class IamService {
 
   getUser(): Observable<User> {
     return this.httpClient.get<User>(`${this.baseApi}/users`);
+  }
+
+  getOnboardingStatus(): Observable<OnboardingStatus> {
+    return this.httpClient.get<OnboardingStatus>(`${this.baseApi}/users/onboard/status`);
   }
 
   onboardUser(completeCreateUserRequest: OnboardUserRequest): Observable<string> {

@@ -33,7 +33,7 @@
       </mat-nav-list>
 
       <!-- Sidebar Footer -->
-      @if (!keycloak.authenticated) {
+      @if (!authContext.authenticated()) {
         <div class="shrink-0 border-t border-outline-variant p-3">
           <button mat-flat-button class="w-full!" aria-label="Get Started" (click)="register()">
             <mat-icon>login</mat-icon>
@@ -92,7 +92,7 @@
             {{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}
           </mat-icon>
         </button>
-        @if (keycloak.authenticated) {
+        @if (authContext.authenticated()) {
           <app-profile-menu />
         } @else {
           <button mat-flat-button aria-label="Get Started" (click)="register()">

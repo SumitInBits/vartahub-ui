@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, computed, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, inject, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Specialisation } from '../../../models/specialistation-model';
 import { createEmptyPage } from '../../../utils/global-api-util';
-import { IamService } from '../../../services/iam-service';
+import { IamService } from '../../../services/api/iam-service';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({

@@ -22,7 +22,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 
 import { MatSelectSearchComponent } from 'ngx-mat-select-search';
 
-import { IamService } from '../../services/iam-service';
+import { IamService } from '../../services/api/iam-service';
 import { Specialisation } from '../../models/specialistation-model';
 
 import { Experience, Proficiency, Role } from '../../models/global-model';
@@ -30,6 +30,8 @@ import { Experience, Proficiency, Role } from '../../models/global-model';
 import { OnboardUserRequest, UserSpecialisationRequest } from '../../models/user-model';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { Title } from '@angular/platform-browser';
+import { MatDialogRef } from '@angular/material/dialog';
 
 type SpecialisationForm = FormGroup<{
   specialisationId: FormControl<string>;
@@ -59,6 +61,8 @@ type SpecialisationForm = FormGroup<{
   styleUrl: './onboarding-form.css',
 })
 export class OnboardingForm {
+  private readonly dialogRef = inject(MatDialogRef<OnboardingForm>);
+  private readonly title = inject(Title);
   private readonly fb = inject(FormBuilder);
   private readonly iamService = inject(IamService);
   private readonly destroyRef = inject(DestroyRef);
@@ -110,9 +114,9 @@ export class OnboardingForm {
     }),
   });
   protected readonly knowledgeLevels = [
-    { value: Proficiency.BEGINNER, label: 'Beginner', },
-    { value: Proficiency.INTERMEDIATE, label: 'Intermediate', },
-    { value: Proficiency.EXPERT, label: 'Expert', },
+    { value: Proficiency.BEGINNER, label: 'Beginner' },
+    { value: Proficiency.INTERMEDIATE, label: 'Intermediate' },
+    { value: Proficiency.EXPERT, label: 'Expert' },
   ];
 
   protected readonly accountTypes = [
@@ -190,6 +194,7 @@ export class OnboardingForm {
   }
 
   constructor() {
+    this.title.setTitle('Onboarding | VartaHub');
     this.loadSpecialisations();
     this.specializationSearchControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -414,7 +419,7 @@ export class OnboardingForm {
     this.organizationRoleControl.updateValueAndValidity();
   }
 
-  private buildRequest(): OnboardUserRequest {
+  private constructOnboardUserRequest(): OnboardUserRequest {
     const formValue = this.onboardingForm.getRawValue();
 
     const specialisations: UserSpecialisationRequest[] =
@@ -440,7 +445,10 @@ export class OnboardingForm {
       this.onboardingForm.markAllAsTouched();
       return;
     }
-    const request = this.buildRequest();
-    console.log('CompleteCreateUserRequest:', request);
+    const onboardUserRequest = this.constructOnboardUserRequest();
+    this.iamService.onboardUser(onboardUserRequest)
+      .subscribe(onboardUserResponse => {
+        this.dialogRef.close();
+      })
   }
 }

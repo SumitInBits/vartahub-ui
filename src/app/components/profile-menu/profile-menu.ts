@@ -3,7 +3,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
-import Keycloak from 'keycloak-js';
+import { AuthContext } from '../../services/auth/auth-context';
 
 @Component({
   imports: [MatIcon, MatIconButton, MatMenu, MatMenuItem, RouterLink, MatMenuTrigger],
@@ -12,11 +12,9 @@ import Keycloak from 'keycloak-js';
   templateUrl: './profile-menu.html',
 })
 export class ProfileMenu {
-  protected readonly keycloak = inject(Keycloak);
+  protected readonly authContext = inject(AuthContext);
 
   async logout(): Promise<void> {
-    await this.keycloak.logout({
-      redirectUri: window.location.origin + '/',
-    });
+    await this.authContext.logout();
   }
 }
