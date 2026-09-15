@@ -9,11 +9,11 @@ export interface User {
   email: string;
   profilePhotoKey: string | undefined;
   identityProviderId: string;
-  role: Role;
   experience: Experience;
   onboardingStatus: OnboardingStatus;
   experienceYears: number | undefined;
   organizationName: string | undefined;
+  organizationRole: string | undefined;
   userSpecialisations: UserSpecialisation[];
 }
 
@@ -28,10 +28,11 @@ export interface UserSpecialisationRequest {
   proficiency: Proficiency;
 }
 
-export interface CompleteCreateUserRequest {
+export interface OnboardUserRequest {
   specialisations: UserSpecialisationRequest[];
   experience: Experience;
   role: string;
   experienceYears: number | undefined;
   organizationName: string | undefined;
+  organizationRole: string | undefined;
 }

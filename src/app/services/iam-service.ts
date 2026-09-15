@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Specialisation, SpecialisationRequest } from '../models/specialistation-model';
 import { Page } from '../models/global-model';
-import { CompleteCreateUserRequest } from '../models/user-model';
+import { OnboardUserRequest, User } from '../models/user-model';
 
 @Service()
 export class IamService {
@@ -23,10 +23,11 @@ export class IamService {
     return this.httpClient.delete<void>(`${this.baseApi}/specialisations/${specialisationId}`);
   }
 
-  completeCreateUser(completeCreateUserRequest: CompleteCreateUserRequest): Observable<string> {
-    return this.httpClient.post<string>(
-      `${this.baseApi}/users/complete`,
-      completeCreateUserRequest,
-    );
+  getUser(): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseApi}/users`);
+  }
+
+  onboardUser(completeCreateUserRequest: OnboardUserRequest): Observable<string> {
+    return this.httpClient.post<string>(`${this.baseApi}/users/onboard`, completeCreateUserRequest);
   }
 }

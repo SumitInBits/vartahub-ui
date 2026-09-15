@@ -18,13 +18,10 @@ const isAccessAllowed = async (
   if (authenticated) {
     return true;
   }
-
   const keycloak = inject(Keycloak);
-
   await keycloak.login({
     redirectUri: window.location.origin + window.location.pathname,
   });
-
   return false;
 };
 

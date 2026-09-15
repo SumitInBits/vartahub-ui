@@ -1,0 +1,364 @@
+<div
+  #roomContainer
+  class="flex h-screen w-screen bg-surface text-on-surface overflow-hidden fixed inset-0 flex-col lg:flex-row font-sans"
+>
+  <!-- Main Conference Workspace Area -->
+  <div class="flex-1 flex flex-col relative h-full overflow-hidden bg-surface-container">
+    <!-- Top Professional Header Bar -->
+    <header
+      class="flex items-center justify-between px-6 py-3.5 bg-surface border-b border-outline-variant shrink-0 z-10 shadow-xs"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-on-primary font-bold text-sm"
+        >
+          V
+        </div>
+        <div>
+          <h1 class="font-bold text-sm sm:text-base text-on-surface tracking-tight">
+            Technical Peer Interview Session
+          </h1>
+          <p class="text-xs text-on-surface-variant">
+            Room ID: <span class="font-mono text-primary font-semibold">{{ roomId }}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Center Countdown Widget -->
+      <div class="hidden md:flex items-center gap-4">
+        <div
+          class="flex items-center gap-2 bg-surface-container px-4 py-1.5 rounded-full border border-outline-variant"
+        >
+          <mat-icon class="text-primary text-sm! size-4!">timer</mat-icon>
+          <span class="font-mono text-sm font-semibold tracking-wide text-on-surface"
+            >{{ formattedTime }} remaining</span
+          >
+        </div>
+        <div
+          class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-medium"
+        >
+          <mat-icon class="text-sm! size-4!">wifi</mat-icon>
+          <span>HD Stream</span>
+        </div>
+      </div>
+
+      <!-- Right Header Tools -->
+      <div class="flex items-center gap-2.5">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openHelpModal()"
+          class="h-10! rounded-xl! border-outline! px-4! flex items-center gap-1.5 text-xs font-semibold"
+        >
+          <mat-icon>lightbulb</mat-icon>
+          <span class="hidden sm:inline">Evaluation Guide</span>
+        </button>
+        <button
+          mat-stroked-button
+          (click)="toggleFullScreen()"
+          class="h-10! w-10! min-w-10! p-0! rounded-xl! border-outline! text-on-surface flex items-center justify-center"
+          [matTooltip]="isFullScreen ? 'Exit Fullscreen' : 'Fullscreen'"
+        >
+          <mat-icon class="text-sm!">{{
+            isFullScreen ? 'fullscreen_exit' : 'fullscreen'
+          }}</mat-icon>
+        </button>
+      </div>
+    </header>
+
+    <!-- Video Streams Grid View -->
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 lg:p-6 overflow-hidden relative">
+      <!-- Remote Participant Tile -->
+      <div
+        class="relative bg-surface rounded-3xl overflow-hidden border border-outline-variant flex items-center justify-center shadow-lg h-full min-h-[220px]"
+      >
+        <video #remoteVideo autoplay playsinline class="w-full h-full object-cover"></video>
+
+        <!-- Peer Info Tag -->
+        <div
+          class="absolute bottom-4 left-4 flex items-center gap-2.5 bg-surface-container text-on-surface px-4 py-2 rounded-2xl text-xs font-semibold border border-outline-variant shadow-md"
+        >
+          <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+          <span>Amit Kumar (Candidate)</span>
+          <span
+            [style.display]="isPeerMuted ? 'inline-flex' : 'none'"
+            class="items-center text-error ml-1"
+          >
+            <mat-icon class="text-sm! size-4!">mic_off</mat-icon>
+          </span>
+        </div>
+      </div>
+
+      <!-- Local Host Tile -->
+      <div
+        class="relative bg-surface rounded-3xl overflow-hidden border border-outline-variant flex items-center justify-center shadow-lg h-full min-h-[220px]"
+      >
+        <video
+          #localVideo
+          autoplay
+          playsinline
+          muted
+          class="w-full h-full object-cover transform -scale-x-100"
+        ></video>
+
+        <!-- Camera Off State -->
+        @if (!isCameraOn) {
+          <div
+            class="absolute inset-0 flex flex-col items-center justify-center bg-surface-container text-on-surface-variant"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-surface flex items-center justify-center text-on-surface font-bold text-xl mb-3 border border-outline-variant"
+            >
+              YH
+            </div>
+            <p class="text-xs font-semibold tracking-wider uppercase">Your camera is turned off</p>
+          </div>
+        }
+
+        <!-- Screen Share Indicator Banner -->
+        @if (isScreenSharing) {
+          <div
+            class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md animate-pulse"
+          >
+            <mat-icon class="text-sm! size-4!">screen_share</mat-icon>
+            <span>You are sharing your screen</span>
+          </div>
+        }
+
+        <!-- Local Info Tag -->
+        <div
+          class="absolute bottom-4 left-4 flex items-center gap-2.5 bg-surface-container text-on-surface px-4 py-2 rounded-2xl text-xs font-semibold border border-outline-variant shadow-md"
+        >
+          <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+          <span>You (Interviewer)</span>
+          <span
+            [style.display]="!isMicOn ? 'inline-flex' : 'none'"
+            class="items-center text-error ml-1"
+          >
+            <mat-icon class="text-sm! size-4!">mic_off</mat-icon>
+          </span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Floating Control Toolbar -->
+    <footer
+      class="flex items-center justify-center gap-3 sm:gap-4 py-4 bg-surface border-t border-outline-variant shrink-0 px-6 shadow-sm"
+    >
+      <!-- Microphone Toggle -->
+      <button
+        mat-fab
+        [color]="isMicOn ? 'primary' : 'warn'"
+        (click)="toggleMic()"
+        [matTooltip]="isMicOn ? 'Mute Microphone' : 'Unmute Microphone'"
+        class="shadow-sm"
+      >
+        <mat-icon>{{ isMicOn ? 'mic' : 'mic_off' }}</mat-icon>
+      </button>
+
+      <!-- Camera Toggle -->
+      <button
+        mat-fab
+        [color]="isCameraOn ? 'primary' : 'warn'"
+        (click)="toggleCamera()"
+        [matTooltip]="isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'"
+        class="shadow-sm"
+      >
+        <mat-icon>{{ isCameraOn ? 'videocam' : 'videocam_off' }}</mat-icon>
+      </button>
+
+      <!-- Screen Share Toggle -->
+      <button
+        mat-fab
+        [color]="isScreenSharing ? 'accent' : 'primary'"
+        (click)="toggleScreenShare()"
+        [matTooltip]="isScreenSharing ? 'Stop Screen Share' : 'Share Screen'"
+        class="shadow-sm"
+      >
+        <mat-icon>{{ isScreenSharing ? 'stop_screen_share' : 'screen_share' }}</mat-icon>
+      </button>
+
+      <div class="w-[1px] h-8 bg-outline-variant mx-1"></div>
+
+      <!-- End Call Button -->
+      <button
+        mat-fab
+        color="warn"
+        (click)="leaveCall()"
+        matTooltip="End & Leave Interview Room"
+        class="shadow-sm"
+      >
+        <mat-icon>call_end</mat-icon>
+      </button>
+
+      <!-- Toggle Drawer Button -->
+      <button
+        mat-fab
+        type="button"
+        class="bg-surface-container text-on-surface border border-outline-variant shadow-sm"
+        (click)="isSidebarOpen = !isSidebarOpen"
+        [matTooltip]="isSidebarOpen ? 'Hide Drawer' : 'Open Chat & Notes'"
+      >
+        <mat-icon>{{ isSidebarOpen ? 'right_panel_close' : 'forum' }}</mat-icon>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Professional Collapsible Side Drawer -->
+  @if (isSidebarOpen) {
+    <aside
+      class="w-full lg:w-[400px] bg-surface border-t lg:border-t-0 lg:border-l border-outline-variant flex flex-col h-1/2 lg:h-full overflow-hidden shrink-0 absolute lg:relative bottom-0 right-0 z-20 shadow-2xl"
+    >
+      <!-- Drawer Tabs Header -->
+      <div
+        class="flex items-center justify-between border-b border-outline-variant bg-surface-container px-4 py-3 shrink-0"
+      >
+        <div
+          class="flex items-center gap-1 bg-surface p-1 rounded-2xl border border-outline-variant"
+        >
+          <button
+            class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition"
+            [ngClass]="
+              activeTab === 'chat'
+                ? 'bg-primary text-on-primary shadow-xs'
+                : 'text-on-surface-variant hover:text-on-surface'
+            "
+            (click)="activeTab = 'chat'"
+          >
+            Live Chat
+          </button>
+          <button
+            class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition"
+            [ngClass]="
+              activeTab === 'notes'
+                ? 'bg-primary text-on-primary shadow-xs'
+                : 'text-on-surface-variant hover:text-on-surface'
+            "
+            (click)="activeTab = 'notes'"
+          >
+            Eval Notes
+          </button>
+          <button
+            class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition"
+            [ngClass]="
+              activeTab === 'participants'
+                ? 'bg-primary text-on-primary shadow-xs'
+                : 'text-on-surface-variant hover:text-on-surface'
+            "
+            (click)="activeTab = 'participants'"
+          >
+            People (2)
+          </button>
+        </div>
+
+        <!-- Close Drawer Button -->
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="isSidebarOpen = false"
+          class="h-8! min-w-8! w-8! p-0! rounded-xl! border-outline! text-on-surface-variant hover:text-on-surface bg-surface flex items-center justify-center"
+        >
+          <mat-icon class="text-sm!">close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Tab 1: Chat Stream -->
+      @if (activeTab === 'chat') {
+        <div class="flex-1 flex flex-col justify-between overflow-hidden bg-surface">
+          <div class="flex-1 p-4 overflow-y-auto space-y-3.5">
+            @for (msg of messages; track msg) {
+              <div
+                class="p-3.5 rounded-2xl border transition-all"
+                [ngClass]="
+                  msg.isSystem
+                    ? 'bg-surface-container border-outline-variant text-on-surface-variant text-center text-xs'
+                    : 'bg-surface-container border-outline-variant'
+                "
+              >
+                @if (!msg.isSystem) {
+                  <div
+                    class="flex justify-between text-xs text-on-surface-variant mb-1 font-medium"
+                  >
+                    <span class="text-primary font-bold">{{ msg.sender }}</span>
+                    <span>{{ msg.time }}</span>
+                  </div>
+                }
+                <p class="text-sm text-on-surface leading-relaxed">{{ msg.text }}</p>
+              </div>
+            }
+          </div>
+
+          <!-- Message Input Box -->
+          <div
+            class="p-4 border-t border-outline-variant flex gap-2.5 shrink-0 bg-surface-container"
+          >
+            <input
+              type="text"
+              [(ngModel)]="newMessage"
+              (keyup.enter)="sendMessage()"
+              placeholder="Type a message to participants..."
+              class="flex-1 bg-surface border border-outline rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary transition"
+            />
+            <button
+              mat-flat-button
+              color="primary"
+              class="h-11! rounded-xl! px-5! font-semibold"
+              (click)="sendMessage()"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Tab 2: Private Session & Evaluation Notes -->
+      @if (activeTab === 'notes') {
+        <div class="flex-1 flex flex-col p-4 overflow-hidden bg-surface">
+          <div class="mb-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-primary">
+              Interviewer Private Scratchpad
+            </h2>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Jot down coding performance, problem-solving skills, and final verdict.
+            </p>
+          </div>
+          <textarea
+            [(ngModel)]="sessionNotes"
+            placeholder="Type evaluation notes here (saved securely for post-interview feedback)..."
+            class="flex-1 bg-surface-container border border-outline rounded-2xl p-4 text-sm text-on-surface placeholder-on-surface-variant resize-none focus:outline-none focus:border-primary transition leading-relaxed shadow-inner"
+          ></textarea>
+        </div>
+      }
+
+      <!-- Tab 3: Participants List -->
+      @if (activeTab === 'participants') {
+        <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-surface">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-primary mb-2">
+            In This Meeting (2)
+          </h2>
+          @for (p of participants; track p.name) {
+            <div
+              class="flex items-center justify-between p-3 rounded-2xl bg-surface-container border border-outline-variant"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs"
+                >
+                  {{ p.avatar }}
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-on-surface">{{ p.name }}</h4>
+                  <p class="text-xs text-on-surface-variant">{{ p.role }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 text-primary">
+                <mat-icon class="text-sm!">mic</mat-icon>
+                <mat-icon class="text-sm!">videocam</mat-icon>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </aside>
+  }
+</div>

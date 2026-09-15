@@ -1,0 +1,74 @@
+<h2 mat-dialog-title class="text-xl font-bold">
+  @if (data.mode === 'view') {
+    Feedback for {{ data.meeting.title }}
+  } @else {
+    Rate your session with {{ data.meeting.instructor }}
+  }
+</h2>
+
+<mat-dialog-content class="mat-typography py-4">
+  @if (data.mode === 'view') {
+    <!-- VIEW MODE: Correctly dims stars above the rating -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-1">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-icon
+            class="h-6! w-6! text-[24px]!"
+            [class.text-primary]="star <= (data.meeting.feedback?.rating ?? 0)"
+            [class.text-on-surface-variant_40]="star > (data.meeting.feedback?.rating ?? 0)"
+            [style.opacity]="star <= (data.meeting.feedback?.rating ?? 0) ? '1' : '0.3'"
+          >
+            star
+          </mat-icon>
+        }
+        <span class="ml-2 font-bold text-sm">{{ data.meeting.feedback?.rating }}/5</span>
+      </div>
+      <div>
+        <h4 class="text-sm font-semibold text-on-surface-variant">Comments:</h4>
+        <p class="mt-1 text-on-surface bg-surface-container p-3 rounded-xl text-sm">
+          {{ data.meeting.feedback?.comment || 'No comments provided.' }}
+        </p>
+      </div>
+    </div>
+  } @else {
+    <!-- GIVE MODE: Defaults to 5 bright stars, dims unselected ones on hover/click -->
+    <div class="space-y-4">
+      <p class="text-sm text-on-surface-variant">
+        How would you rate your overall experience out of 5 stars?
+      </p>
+
+      <div class="flex items-center gap-1 cursor-pointer py-1">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-icon
+            class="h-5! w-5! text-[20px]! transition-transform hover:scale-110"
+            [class.text-primary]="star <= (hoverRating || rating)"
+            [style.opacity]="star <= (hoverRating || rating) ? '1' : '0.3'"
+            (mouseenter)="hoverRating = star"
+            (mouseleave)="hoverRating = 0"
+            (click)="setRating(star)"
+          >
+            star
+          </mat-icon>
+        }
+        <span class="ml-2 text-sm font-semibold text-primary">{{ rating }}/5</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="w-full mt-2">
+        <mat-label>Write your feedback / comment</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="comment"
+          rows="4"
+          placeholder="Share details about your session, what went well, or what could be improved..."
+        ></textarea>
+      </mat-form-field>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2 pb-2 pr-2">
+  <button mat-stroked-button mat-dialog-close class="rounded-xl!">Cancel</button>
+  @if (data.mode === 'give') {
+    <button mat-flat-button (click)="submitFeedback()" class="rounded-xl!">Submit Feedback</button>
+  }
+</mat-dialog-actions>
