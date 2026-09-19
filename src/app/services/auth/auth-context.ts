@@ -1,13 +1,23 @@
 import { inject, Service } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import { Role } from '../../models/global-model';
+
 @Service()
 export class AuthContext {
   private readonly keycloak = inject(Keycloak);
 
-
   authenticated() {
     return this.keycloak.authenticated;
+  }
+
+  getId() {
+    return this.keycloak.subject;
+  }
+
+  getRole(): Role | undefined {
+    const roles = this.keycloak.realmAccess?.roles ?? [];
+    const priority = [Role.ADMIN, Role.INSTRUCTOR, Role.USER];
+    return priority.find((role) => roles.includes(role.toLowerCase()));
   }
 
   hasAnyRoles(roles: Role[]): boolean {

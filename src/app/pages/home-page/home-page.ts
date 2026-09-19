@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { InstructorProfileDialog } from '../instructor-page/instructor-profile-dialog';
+import { AuthContext } from '../../services/auth/auth-context';
+import { IamService } from '../../services/api/iam-service';
+import { StorageService } from '../../services/storage/storage-service';
+import { OnboardingForm } from '../../components/onboarding-form/onboarding-form';
+import { OnboardingStatusDto } from '../../models/user-model';
+import { OnboardingStatus } from '../../models/global-model';
 
 interface Instructor {
   name: string;
@@ -32,13 +38,23 @@ interface PracticeMode {
   styleUrl: './home-page.css',
 })
 export class HomePage {
-  constructor(private readonly dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
+  private readonly onboardingStatusKey = 'onboardingStatus';
+  private readonly authContext = inject(AuthContext);
+  private readonly iamService = inject(IamService);
+  private readonly storageService = inject(StorageService);
 
   openProfile(instructor: Instructor): void {
     this.dialog.open(InstructorProfileDialog, {
       width: 'min(92vw, 520px)',
       maxWidth: '100vw',
       data: instructor,
+    });
+  }
+
+  constructor() {
+    effect(() => {
+      this.checkOnboardingStatus();
     });
   }
 
@@ -108,4 +124,29 @@ export class HomePage {
       avatar: 'NG',
     },
   ];
+
+  checkOnboardingStatus() {
+    const onboardingStatus = this.storageService.get<OnboardingStatusDto>(this.onboardingStatusKey);
+    if (onboardingStatus) {
+      if (onboardingStatus.keycloakId !== this.authContext.getId()) {
+        this.storageService.remove(this.onboardingStatusKey);
+      } else if (onboardingStatus.status === OnboardingStatus.COMPLETED) {
+        return;
+      }
+    }
+
+    if (this.authContext.authenticated()) {
+      this.iamService.getOnboardingStatus().subscribe((statusResponse) => {
+        if (statusResponse.status === OnboardingStatus.PENDING) {
+          this.dialog.open(OnboardingForm, {
+            width: '100vw',
+            maxWidth: '100vw',
+            height: '100vh',
+            maxHeight: '100vh',
+          });
+        }
+        this.storageService.set<OnboardingStatusDto>(this.onboardingStatusKey, statusResponse);
+      });
+    }
+  }
 }

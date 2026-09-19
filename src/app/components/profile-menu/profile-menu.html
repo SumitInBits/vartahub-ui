@@ -5,8 +5,8 @@
 <mat-menu #profileMenu="matMenu" xPosition="before" class="rounded-2xl! min-w-56! p-2!">
   <!-- User info header inside menu -->
   <div class="px-4 py-3 border-b mb-2">
-    <p class="text-sm font-bold">Alex Johnson</p>
-    <p class="text-xs truncate">alex.johnson&#64;example.com</p>
+    <p class="text-sm font-bold">{{ getFullName() }}</p>
+    <p class="text-xs truncate">{{ user()?.email }}</p>
   </div>
 
   <button mat-menu-item routerLink="/profile" class="rounded-xl! mb-1!">

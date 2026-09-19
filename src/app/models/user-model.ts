@@ -1,4 +1,4 @@
-import { Experience, OnboardingStatus, Proficiency, Role } from './global-model';
+import { Experience, OnboardingStatus, Proficiency } from './global-model';
 import { Specialisation } from './specialistation-model';
 
 export interface User {
@@ -35,4 +35,9 @@ export interface OnboardUserRequest {
   experienceYears: number | undefined;
   organizationName: string | undefined;
   organizationRole: string | undefined;
+}
+
+export interface OnboardingStatusDto {
+  keycloakId: string;
+  status: OnboardingStatus;
 }
