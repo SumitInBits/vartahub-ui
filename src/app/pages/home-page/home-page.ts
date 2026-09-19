@@ -128,25 +128,42 @@ export class HomePage {
   checkOnboardingStatus() {
     const onboardingStatus = this.storageService.get<OnboardingStatusDto>(this.onboardingStatusKey);
     if (onboardingStatus) {
-      if (onboardingStatus.keycloakId !== this.authContext.getId()) {
+      const isSameUser = onboardingStatus.keycloakId === this.authContext.getId();
+      console.log(isSameUser)
+      if (isSameUser) {
+        // If it's completed for the same user, do nothing and stop here
+        if (onboardingStatus.onboardingStatus === OnboardingStatus.COMPLETED) {
+          return;
+        }
+
+        // If it's PENDING in localStorage for the same user, trigger the dialog immediately!
+        if (onboardingStatus.onboardingStatus === OnboardingStatus.PENDING) {
+          this.openOnboardingDialog();
+          return; // Skip the redundant API call
+        }
+      } else {
+        // User changed, clear storage
         this.storageService.remove(this.onboardingStatusKey);
-      } else if (onboardingStatus.status === OnboardingStatus.COMPLETED) {
-        return;
       }
     }
 
+    // Fallback: If not in storage or user changed, fetch from backend
     if (this.authContext.authenticated()) {
       this.iamService.getOnboardingStatus().subscribe((statusResponse) => {
-        if (statusResponse.status === OnboardingStatus.PENDING) {
-          this.dialog.open(OnboardingForm, {
-            width: '100vw',
-            maxWidth: '100vw',
-            height: '100vh',
-            maxHeight: '100vh',
-          });
+        if (statusResponse.onboardingStatus  === OnboardingStatus.PENDING) {
+          this.openOnboardingDialog();
         }
         this.storageService.set<OnboardingStatusDto>(this.onboardingStatusKey, statusResponse);
       });
     }
+  }
+
+  private openOnboardingDialog() {
+    this.dialog.open(OnboardingForm, {
+      width: '100vw',
+      maxWidth: '100vw',
+      height: '100vh',
+      maxHeight: '100vh',
+    });
   }
 }
