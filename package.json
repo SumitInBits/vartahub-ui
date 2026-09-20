@@ -19,6 +19,8 @@
     "@angular/material": "^22.1.5",
     "@angular/platform-browser": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "@ngx-formly/core": "^8.0.0",
+    "@ngx-formly/material": "^8.0.0",
     "keycloak-angular": "^22.0.0",
     "keycloak-js": "^26.2.4",
     "ngx-mat-select-search": "^8.0.6",
