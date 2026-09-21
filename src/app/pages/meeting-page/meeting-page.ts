@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MeetingDetailsDialog } from './meeting-details-dialog/meeting-details-dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 export interface Meeting {
   id: number;
@@ -28,24 +29,39 @@ export interface Meeting {
 }
 
 @Component({
-  imports: [MatButtonModule, MatIconModule, RouterLink, MatPaginator],
   selector: 'app-meeting-page',
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, RouterLink, MatPaginator, MatTableModule],
   styleUrl: './meeting-page.css',
   templateUrl: './meeting-page.html',
 })
 export class MeetingPage {
   private readonly dialog = inject(MatDialog);
+
   protected currentPage = 0;
-  protected currentPageSize = 5;
+  protected currentPageSize = 3;
+
+  protected readonly pastMeetingColumns = [
+    'meeting',
+    'date',
+    'duration',
+    'type',
+    'feedback',
+    'actions',
+  ];
+
   protected onPastMeetingsPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.currentPageSize = event.pageSize;
   }
+
   protected get paginatedPastMeetings(): Meeting[] {
     const startIndex = this.currentPage * this.currentPageSize;
     const endIndex = startIndex + this.currentPageSize;
+
     return this.pastMeetings.slice(startIndex, endIndex);
   }
+
   protected openMeetingDetails(meeting: Meeting): void {
     this.dialog.open(MeetingDetailsDialog, {
       width: '640px',
@@ -55,6 +71,7 @@ export class MeetingPage {
       data: meeting,
     });
   }
+
   protected readonly upcomingMeetings: Meeting[] = [
     {
       id: 1,
@@ -127,6 +144,25 @@ export class MeetingPage {
     },
     {
       id: 5,
+      title: 'Java & Spring Boot Practice',
+      instructor: 'Amit Singh',
+      instructorRole: 'Backend Engineer',
+      avatar: 'AS',
+      date: 'Aug 20, 2026',
+      time: '3:30 PM',
+      duration: '60 min',
+      type: 'Peer Interview',
+      status: 'completed',
+      skills: ['JavaScript', 'React'],
+      createdAt: 'Sep 10, 2026, 2:15 PM',
+      feedback: {
+        submitted: true,
+        rating: 3,
+        comment: 'Good practice session with useful discussion around Spring Boot.',
+      },
+    },
+    {
+      id: 6,
       title: 'Java & Spring Boot Practice',
       instructor: 'Amit Singh',
       instructorRole: 'Backend Engineer',
