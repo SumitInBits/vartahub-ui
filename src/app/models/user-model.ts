@@ -39,5 +39,5 @@ export interface OnboardUserRequest {
 
 export interface OnboardingStatusDto {
   keycloakId: string;
-  onboardingStatus: OnboardingStatus;
+  status: OnboardingStatus;
 }

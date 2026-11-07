@@ -127,17 +127,18 @@ export class HomePage {
 
   checkOnboardingStatus() {
     const onboardingStatus = this.storageService.get<OnboardingStatusDto>(this.onboardingStatusKey);
+    console.log('Onboarding status from storage:', onboardingStatus);
     if (onboardingStatus) {
       const isSameUser = onboardingStatus.keycloakId === this.authContext.getId();
-      console.log(isSameUser)
+      console.log('Is same user:', isSameUser);
       if (isSameUser) {
         // If it's completed for the same user, do nothing and stop here
-        if (onboardingStatus.onboardingStatus === OnboardingStatus.COMPLETED) {
+        if (onboardingStatus.status === OnboardingStatus.COMPLETED) {
           return;
         }
 
         // If it's PENDING in localStorage for the same user, trigger the dialog immediately!
-        if (onboardingStatus.onboardingStatus === OnboardingStatus.PENDING) {
+        if (onboardingStatus.status === OnboardingStatus.PENDING) {
           this.openOnboardingDialog();
           return; // Skip the redundant API call
         }
@@ -150,7 +151,7 @@ export class HomePage {
     // Fallback: If not in storage or user changed, fetch from backend
     if (this.authContext.authenticated()) {
       this.iamService.getOnboardingStatus().subscribe((statusResponse) => {
-        if (statusResponse.onboardingStatus  === OnboardingStatus.PENDING) {
+        if (statusResponse.status  === OnboardingStatus.PENDING) {
           this.openOnboardingDialog();
         }
         this.storageService.set<OnboardingStatusDto>(this.onboardingStatusKey, statusResponse);
